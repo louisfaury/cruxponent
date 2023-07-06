@@ -1,0 +1,24 @@
+
+<style>
+  .gray-block {
+    position: relative;
+    background-color: #f0f0f0;
+    padding: 20px;
+    word-wrap: break-word;
+    font-style: italic;
+  }
+
+  .gray-block .title-frame {
+    position: absolute;
+    bottom: -43px;
+    right: 0;
+    padding: 10px;
+    background-color: #d4d4d4;
+    color: #000000;
+  }
+</style>
+
+<div class="gray-block">
+  {{ .Inner }}
+  <div class="title-frame">{{ .Get "title" }}</div>
+</div>

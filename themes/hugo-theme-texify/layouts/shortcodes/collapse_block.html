@@ -1,0 +1,51 @@
+{{ $blockID := .Get "id" }}
+{{ $blockContent := .Inner }}
+{{ $backgroundColor := .Get "background-color" | default "blue" }}
+{{ $title := .Get "title" | default "Block Title" }}
+
+<div class="collapse-block" style="background-color: {{ $backgroundColor }}">
+  <div class="block-header" onclick="toggleBlock(this)">
+    <span class="collapse-icon">▼</span>
+    <strong>{{ $title }}</strong>
+  </div>
+  <div class="block-content">
+    {{ $blockContent }}
+  </div>
+</div>
+
+<script>
+  function toggleBlock(header) {
+    var contentElement = header.nextElementSibling;
+    var iconElement = header.querySelector('.collapse-icon');
+
+    if (contentElement.style.display === "none") {
+      contentElement.style.display = "block";
+      iconElement.innerHTML = "▼";
+    } else {
+      contentElement.style.display = "none";
+      iconElement.innerHTML = "▶";
+    }
+  }
+</script>
+
+<style>
+  .collapse-block {
+    padding: 0px;
+    margin-bottom: 2px;
+  }
+
+  .block-header {
+    color: black;
+    cursor: pointer;
+  }
+
+  .collapse-icon {
+    display: inline-block;
+    margin-right: 5px;
+    font-size: 12px;
+  }
+
+  .block-content {
+    margin-top: 5px;
+  }
+</style>
