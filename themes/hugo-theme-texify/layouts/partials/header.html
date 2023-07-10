@@ -1,12 +1,12 @@
 <header id="header">
-  <h1>
-    <a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a>
+  <h1 style="margin-bottom: 10px;">
+    <a href="{{ .Site.BaseURL }}" style="font-size: smaller; color: #A9A9A9;">{{ .Site.Title }}</a>
   </h1>
 
-  <nav>
+  <nav style="margin-bottom: 30px;">
     {{ range .Site.Menus.main }}
     <span class="nav-bar-item">
-      <a class="link" href="{{ .URL | safeURL }}">{{ .Name }}</a>
+      <a class="link" href="{{ .URL | safeURL }}" style="color: #3399CC;">{{ .Name }}</a>
     </span>
     {{ end }}
   </nav>
