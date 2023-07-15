@@ -1,0 +1,26 @@
+<!-- Create a new file in your Hugo project's "layouts/shortcodes" directory with the name "image.html" -->
+
+<!-- layouts/shortcodes/image.html -->
+{{- $src := .Get "src" -}}
+{{- $width := .Get "width" -}}
+{{- $align := .Get "align" -}}
+
+<img src="{{ $src }}" style="width: {{ $width }};" class="align{{ $align }}" alt="">
+
+<style>
+.alignleft {
+  float: left;
+  margin-right: 1rem;
+}
+
+.alignright {
+  float: right;
+  margin-left: 1rem;
+}
+
+.aligncenter {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
