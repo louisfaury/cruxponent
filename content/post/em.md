@@ -115,15 +115,19 @@ $$
 \begin{aligned}
     \argmin\_\theta \ell(\theta\vert \theta\_t) &= \argmin\_\theta\mathcal{L}(\theta\_t) -\int_{z} \log\left(\frac{p(X, z \vert \theta)}{p(X, z \vert \theta\_t)}\right)p(z \vert X, \theta\_t) dz \\;, \\\
 &= \argmin\_\theta  -\int_{z} \log\left(p(X, z \vert \theta)\right)p(z \vert X, \theta\_t) dz \\;,\\\
-&= \argmax\_\theta  \mathbb{E}\left[\log p(X, z \vert \theta) \middle\vert X, \theta\_t \right]\\;.
+&= \argmax\_\theta  \left\\{\mathcal{Q}(\theta\vert \theta\_t):= \mathbb{E}\left[\log p(X, z \vert \theta) \middle\vert X, \theta\_t \right]\right\\}\\;.
 \end{aligned}
 $$
 
-The quantity $\mathcal{Q}(\theta\vert \theta\_t):=\mathbb{E}\left[\log p(X, z \vert \theta) \middle\vert X, \theta\_t \right]$ is usually called the
-_complete-data likelihood_, in opposition to the incomplete-data likelihood $\mathcal{L}(\theta)$. 
-The first step in completing the EM step is therefore to compute this expectation,  or equivalenty to compute the
+The quantity $p(x, z \vert \theta)$ is usually called the
+_complete-data likelihood_, in opposition to the incomplete-data likelihood $p(x\vert \theta)$.
+Its conditional expectation with respect to the observations and the model estimates $\theta\_t$ is denoted 
+$\mathcal{Q}(\theta\vert \theta\_t):=\mathbb{E}\left[\log p(X, z \vert \theta) \middle\vert X, \theta\_t \right]$,
+and refered to as the _auxiliary log-likelihood_.
+
+The first step in completing the EM step is to materialise the auxiliary log-likelihood, which requires computing the
 conditional $p(z \vert X, \theta\_t)$. This is called the **Expectation** step. The second step consist in
-maximizing this expection w.r.t $\theta$; this is the **Maximization** step. 
+maximizing the auxiliary log-likelihood w.r.t $\theta$; this is the **Maximization** step. 
 
 {{< pseudocode title="EM" >}}
 Input: $\theta_0$
@@ -238,4 +242,122 @@ yielding $\lambda^\star = -\frac{1}{n}  \sum\_{i=1}^n\sum\_{k=1}^K \pi\_k^i$. Su
 yields the announced claim.
 {{% /toggle_block %}}
 
+
 ## Learning a finite Hidden Markov Model
+
+In this section we consider the problem of learning the parameters of a finite HMM.
+Let $\mathcal{Z} = \\{1, \ldots, n\\}$ the state space and $\mathcal{X} = \\{1, \ldots, m\\}$ the observation space.
+Recall the HMM dynamics; for $t\geq 1$:
+$$
+\begin{aligned}
+x\_t &\sim p\_\nu(\cdot\vert z\_t)\\; ,\\\
+z\_{t+1} &\sim p\_\mu(\cdot\vert z\_t) \\;, \\\
+\end{aligned}
+$$
+where $p\_\nu$ describes the state's dynamics and $p\_\mu$ the observation kernel. For simplicity, we assume that
+we have access to only one trajectory of observations $(x\_1, \ldots, x\_n)\in\mathcal{X}^n$ to learn from.
+Our goal is to learn 
+the HMM parameters $\theta = (\mu, \nu)$ jointly. Gradient descent on the maximum likelihood objective:
+$$
+\mathcal{L}(\theta) = p\_\theta(x\_1, \ldots, x\_n)\\;,
+$$
+is a valid approach, as gradients can be computed in a _filtering_ fashion -- see
+\[[Krishnamurthy §4.2](https://www.cambridge.org/core/books/partially-observed-markov-decision-processes/505ADAE28B3F22D1594F837DEAFF1E0C)\].
+However, the EM often is the method of choice
+for bootstrapping this optimisation process. Below, we detail both the Expecation and Maximisation step
+after $t$ iterations. 
+
+{{% toggle_block background-color="#CBE4FE" title="Note" %}}
+The application of the EM procedure to estimate the parameters of a finite HMM with discrete observation space is known under
+the name of [Baum-Welch](https://en.wikipedia.org/wiki/Baum%E2%80%93Welch_algorithm) algorithm.
+{{% /toggle_block %}}
+
+### Expectation
+We will need to compute the conditional distribution $p(z\_k \vert x\_{1:n}, \theta\_t)$ for every $k=1, \ldots, t$. This 
+is a typical exercise of fixed-interval smoothing. We provide below the recursive implementation of an optimal fixed-interval
+smoother. For details and derivation, we refer the interested reader to
+\[[Krishnamurthy §3.3.5](https://www.cambridge.org/core/books/partially-observed-markov-decision-processes/505ADAE28B3F22D1594F837DEAFF1E0C)\].
+Let us denote $\pi_{k\vert n}(z) = p(z\_k=z \vert x\_{1:n}, \theta\_t)$. We easily obtain that:
+$$
+\pi_{k\vert n}(z) = \frac{\pi\_k(z)\beta\_{k\vert n}(z)}{\sum_{z'\in\mathcal{Z}}\pi\_k(z')\beta\_{k\vert n}(z')}\\;.
+$$
+Above,  $\pi\_k(z) = p(z\_k=z\vert x\_{1:k}, \theta\_t)$ is computed is a forward filter:
+$$
+\pi\_k(z) = \eta^{-1} p\_{\nu\_t}(x\_k\vert z\_k=z) \sum_{z'\in\mathcal{Z}} p\_{\mu\_t}(z\_k=z \vert z\_{k-1}=z')\pi\_{k-1}(z')
+$$
+where $\eta$ is a normalisation variable, omitted here to reduce clutter.  Further, 
+$\beta\_{k\vert n}(z) = p(x\_{k+1:n}\vert z\_k, \theta\_t)$ is computed via _backward_ recursion:
+$$
+\beta\_{k\vert n}(z) = \sum\_{z'\in\mathcal{Z}} p\_{\nu\_t}(x\_{k+1}\vert z\_{k+1}=z') 
+p\_{\mu\_t}(z\_{k+1}=z'\vert z\_k=z)\beta\_{k+1\vert n}(z')
+$$
+initialised at $\beta\_{n\vert n}(z)=1$. 
+Another smoothed estimate we'll need 
+$\pi_{k\vert n}(z, z') := p(z\_k=z, z\_{k-1}=z'\vert x\_{1:n}, \theta\_t)$ is computed similarly. 
+
+With those computations out of the way, we can now materialise the auxiliary log-likelihood:
+$$
+\mathcal{Q}(\theta\vert \theta\_t) = \sum\_{k=1}^n \sum\_{z\in\mathcal{Z}}\pi\_{k\vert n}(z)\log p\_\nu(x\_{k}\vert z\_{k}=z) + 
+\sum\_{k=1}^n \sum\_{z, z'\in\mathcal{Z}} \pi\_{k\vert n}(z, z')\log p\_\mu(z\_{k}=z\vert z\_{k-1}=z')\\;.
+$$
+
+{{% toggle_block background-color="#FAD7A0" title="Proof" default-display="none"%}}
+Observe that by applying Bayes rules twice, and using the Markovian structure of the HMM:
+$$
+\begin{aligned}
+p(z\_{1:n}, x\_{1:n} \vert \theta) &= p\_\mu(z\_{n}\vert z\_{n-1}) p\_\nu(x\_n \vert z\_n) p(z\_{1:n-1}, x\_{1:n-1} \vert \theta) \\; ,\\\
+&= \prod\_{k=1}^n p\_\mu(z\_{k}\vert z\_{k-1}) p\_\nu(x\_k \vert z\_k) \\;,
+\end{aligned}
+$$
+where we omitted the marginal $p(z\_0)$ as it is assumed known and not relevant for optimisation.
+Therefore, the auxiliary log-likelihood will write:
+$$
+\begin{aligned}
+\mathcal{Q}(\theta\vert \theta\_t) &= \mathbb{E}\left[\log p(x\_{1:n}, z\_{1:n} \vert \theta) \middle\vert x\_{1:n}, \theta\_t \right] \\;,\\\
+&=  \sum\_{k=1}^n \sum\_{z\in\mathcal{Z}}p\_\nu(z\_k=z \vert x\_{1:n})\log p\_\nu(x\_{k}\vert z\_k=z) + 
+\sum\_{k=1}^n \sum\_{z, z'\in\mathcal{Z}} p(z\_k=z, z\_{k-1}=z'\vert x\_{1:n}, \theta\_t)\log p\_\mu(z\_{k}=z\vert z\_{k-1}=z')\\;, \\\
+&= \sum\_{k=1}^n \sum\_{z\in\mathcal{Z}}\pi\_{k\vert n}(z)\log p\_\nu(x\_{k}\vert z\_{k}=z) + 
+\sum\_{k=1}^n \sum\_{z, z'\in\mathcal{Z}} \pi\_{k\vert n}(z, z')\log p\_\mu(z\_{k}=z\vert z\_{k-1}=z')\\;.
+\end{aligned}
+$$
+{{% /toggle_block %}}
+
+
+### Maximisation
+We are now ready to maximise $\mathcal{Q}(\theta\vert \theta\_t)$. Thanks to the finite nature of the HMM, the 
+parametrisation $\nu$ and $\mu$ of the observation likelihood and transitions kernel, respectively, can simply be _stochastic_ matrices: 
+$$
+\begin{aligned}
+\mu \in \big\\{ \mathbf{P} \in \mathbb{R}^{n\times n},  \mathbf{P}\_{ij}\geq 0 \\; \text{ and } \sum\_{j=1}^n  \mathbf{P}\_{ij} = 1 \big\\} \\;, \\\
+\nu \in \big\\{ \mathbf{P} \in \mathbb{R}^{n\times m},  \mathbf{P}\_{ij}\geq 0 \\; \text{ and } \sum\_{j=1}^n  \mathbf{P}\_{ij} = 1 \big\\} \\;.
+\end{aligned}
+$$
+For instance, for every $z, z'\in\mathcal{Z}$ and $x\in\mathcal{X}$:
+$$
+\begin{aligned}
+\mu\_{zz'} &= p(z\_{t+1}=z' \vert z\_{t+1}=z) \\; , \\\
+\nu\_{zx} &= p(x\_t = x \vert z\_{t}=z) \\; .
+\end{aligned}
+$$
+Rewriting the auxiliary log-likelihood under this convention yields:
+$$
+\mathcal{Q}(\theta\vert \theta\_t) =  \sum\_{k=1}^n \sum\_{z\in\mathcal{Z}}\pi\_{k\vert n}(z)\log \nu\_{zx\_k}+ 
+\sum\_{k=1}^n \sum\_{z, z'\in\mathcal{Z}} \pi\_{k\vert n}(z, z')\log \mu\_{zz'}\\;.
+$$
+Both parameters $\mu$ and $\nu$ can therefore be updated independently. Solving each program under the stochastic 
+matrix constraint will yield, for every $z, z'\in\mathcal{Z}$ and $x\in\mathcal{X}$:
+$$
+\begin{aligned}
+[\mu\_{t+1}]\_{zz'} &= \frac{\sum\_{k=1}^n \pi\_{k\vert n}(z, z')}{\sum\_{k=1}^n \pi\_{k\vert n}(z)}\\; , \\\
+[\nu\_{t+1}]\_{xz} &= \frac{\sum\_{k=1}^n \pi\_{k\vert n}(z) \mathbf{1}[x\_k=x]}{\sum\_{k=1}^n \pi\_{k\vert n}(z)}\\; .
+\end{aligned}
+$$
+
+
+{{% toggle_block background-color="#FAD7A0" title="Proof" default-display="none"%}}
+The proof simply relies on satisfying the KKT first-order conditions for each constrained program. It is quite close
+to the proof we conducted to update the GMM's mixture parameter with the EM, and hence is left to the reader as an exercice.
+{{% /toggle_block %}}
+
+## Resources
+The HMM part of this blog-post is highly inspired from \[[Krishnamurthy §4](https://www.cambridge.org/core/books/partially-observed-markov-decision-processes/505ADAE28B3F22D1594F837DEAFF1E0C)\].
