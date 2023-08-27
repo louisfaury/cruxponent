@@ -1,0 +1,12 @@
+{{/* layouts/shortcodes/resize.html */}}
+{{ $image := .Get "image" }}
+{{ $width := .Get "width" }}
+{{ $height := .Get "height" }}
+{{ $alt := .Get "alt" }}
+
+{{ $imageObj := $.Page.Resources.GetMatch $image }}
+{{ with $imageObj }}
+    {{ $resized := .Fill $width $height }}
+    {{ $src := $resized.RelPermalink }}
+    <img src="{{ $src }}" alt="{{ $alt }}" width="{{ $resized.Width }}" height="{{ $resized.Height }}">
+{{ end }}
