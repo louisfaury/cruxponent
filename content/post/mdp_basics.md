@@ -4,8 +4,8 @@ title = "MDP Fundamentals (1/3)"
 date = "2022-09-26"
 +++
 
-This blog post is the first of a short series on control in discounted, discrete MDPs. 
-In particular, we'll cover here the very basics: the definition of a MDP, the different notions
+This blog post is the first of a short series on control in discounted discrete MDPs. 
+We will cover here the very basics: the definition of an MDP, the different notions
 of policies (history-dependent, Markovian, stationary,...), as well as the discounted objective for MDPs.
 
 
@@ -13,13 +13,13 @@ of policies (history-dependent, Markovian, stationary,...), as well as the disco
 
 ## Markov Decision Processes
 Markov Decision Processes (MDPs) stand as a fundamental formalisation of sequential decision-making and control problems. 
-Throughout the series, we will focus on discrete MDPs – with discrete (i.e finite or countable) state and action spaces. 
-Most ideas are portable to continuous MDPs; their proper treatment requiring slightly more subtle measure theoretic argument, we exclude
-them for the sake of clarity. 
+Throughout this series, we will focus on discrete MDPs – with finite or countable state and action spaces. 
+Most ideas are portable to continuous MDPs; their proper treatment requiring slightly more subtle measure theoretic arguments, we exclude
+them for the sake of simplicity. 
 
 ### Definition
-The first ingredients to a fully-observable, stationary MDP are a state space $\mathcal{S}$ and an control/action space $\mathcal{A}$. 
-As announced we will focus on the case where $\mathcal{S}$, $\mathcal{A}$ are discrete - that is, finite or countable.
+The first ingredients to a fully-observable, stationary MDP are a state space $\mathcal{S}$ and an action space $\mathcal{A}$. 
+As announced we will focus here on the case where $\mathcal{S}$, $\mathcal{A}$ are discrete -- that is, finite or countable.
 The _stationary_ dynamics between different states is encoded by some transition kernel $\mathcal{P}$, where:
 $$
     \mathcal{P}\_s^a(\cdot) = \mathbb{P}(s\_{t+1} = \cdot\vert s\_t=s, a\_t=a) \\; \text{ for any } t\geq 1\\; .
@@ -27,16 +27,18 @@ $$
 A stationary reward function $r(s, a)$ measures the quality of action $a$ when executed in state $s$. That's basically it;
 a MDP $\mathcal{M}$ is a collection of a state-space, an action-space, a probabilistic rule of transition to states from state-action pairs, 
 and a measure of success through the reward function.
-{{< pseudocode title="MDP" >}}
+{{< boxed title="MDP" >}}
 $$
+{
     \mathcal{M} := (\mathcal{S}, \mathcal{A}, \mathcal{P}, r)
+}
 $$
-{{< /pseudocode >}}
+{{< /boxed >}}
 
 
 ### Decision-rule and Policies
 Solving an MDP informally means that we want to generate trajectories $(s\_1, a\_1, \ldots s\_t, a\_t, \ldots)$
-yielding large cumulated rewards (we'll see in a bit how we measure that exactly).
+yielding large cumulated rewards (we will see in a bit how we measure that exactly).
 
 #### Decision-rules
 At a given round $t$, an agent trying to solve the MDP is able to pick a _decision-rule_ $d\_t$ 
@@ -50,9 +52,9 @@ $$
 The next action that is played is $a\_t \sim d\_t(h\_t)$.
 This space of function is called the space of history-dependent, randomised strategies and denoted $\mathcal{D}^{\text{HR}}$. 
 It contains other strategies of interest like history-dependent deterministic $\mathcal{D}^{\text{HD}}$, Markovian randomized $\mathcal{D}^{\text{MR}}$ and Markovian deterministic $\mathcal{D}^{\text{MD}}$ decision-rules. 
-Recall that a Markovian deterministic policy $d$ takes as an argument only the current state and returns a unique control; 
+A Markovian deterministic decision-rule $d$ takes as an argument only the current state and returns a unique control; 
 _i.e._ $d\in\mathcal{D}^\text{MD} \Longrightarrow d:\mathcal{S}\mapsto\mathcal{A}$.
-The different classes of policies obey the following relationships;
+The different classes of decision-rules obey the following relationships;
 $$
 \boxed{
 	\begin{aligned}
@@ -64,16 +66,17 @@ $$
 $$
 
 #### Policies
-A _policy_ $\pi=(d_1, \ldots, d_T)$ is a sequence of decision rules -- the 
+A _policy_ $\pi=(d_1, \ldots, d_T, \ldots)$ is a sequence (potentially infinite) of decision rules -- the 
 different spaces of policies being denoted $\Pi^{\text{MD}}$, $\Pi^{\text{MR}}$, $\Pi^{\text{HD}}$ and $\Pi^{\text{HR}}$. 
 History-dependent, randomised policies are the most general and can represent any decision-making agent.
-It is however clear that they might not be the easiest to handle and represent, as they might require infinite memory.
+They might not be the easiest to handle and represent, as they might require infinite memory.
 Arguably the most basic policy sub-class is the one of _stationary_ policies, denoted $\mathcal{S}^{\text{MD}}$. 
 An agent playing with a stationary policy applies at each time step the same decision-rule:
 $$
 		\pi\in\mathcal{S}^{\text{MD}} \Longrightarrow \pi = (d, d, \ldots), \text{ where }d\in\mathcal{D}^\text{MD}\\; .
 $$
-We will see that in our case, this light-weight policy class is actually _enough_ to solve an MDP.
+We will see that this  light-weight policy class is actually _enough_ to solve an MDP (at least for the objective
+that we care about).
 This will make finding an _optimal_ policy (whatever that means for now) reasonable from
 a computational standpoint.
 
@@ -93,27 +96,19 @@ $$
 $$
 
 ### Discounted Objective
-We are now ready to precise how we measure the cumulative reward along a trajectory. Here, we will focus on the discounted approach.
-Discounting naturally arises in situations where the decision-maker prefer to adopt _myopic_ strategies - it is 
-more concerned about the immediate reward of its actions rather than future benefits he might enjoy. Let $\lambda\in[0, 1)$ the _discount_ factor. 
-It accounts for the decision-maker's degree of conservatism; the closer to 0, the more preoccupied he is about his immediate reward. 
-The $\lambda$-discounted reward of a policy $\pi\in\Pi^{\text{HR}}$ is defined as:
+Let's now get a bit more precise of what constitutes a "good" policy. We will focus on the _discounted_ approach.
+Discounting naturally arises in situations where the decision-maker prefer to adopt _myopic_ strategies: it is 
+more concerned about the immediate reward of its actions rather than benefits he might enjoy far in the future. 
 
-{{< pseudocode title="Discounted objective" >}}
+Let $\lambda\in[0, 1)$ the _discount_ factor. 
+It accounts for the decision-maker's degree of conservatism; the closer to 0, the more preoccupied it is about immediate reward. 
+The $\lambda$-discounted reward of a policy $\pi\in\Pi^{\text{HR}}$ is:
+
+{{< boxed title="Discounted objective" >}}
 $$ 
     v_\lambda^\pi(s) := \lim_{T\to\infty} \mathbb{E}_s^\pi\left[ \sum_{t=1}^T \lambda^{t-1}r(s_t, a_t)\right], \; s\in\mathcal{S}
 $$
-{{< /pseudocode >}}
-
-
-<br>
-<br>
-{{% toggle_block background-color="#CBE4FE" title="Note" %}}
-We focus here on the discounted objective, not because of its practical relevance
-but rather because of its practical _usefulness_: it makes up for an easy analysis and approximates well
-other criterion - such as the stationary-reward objective, or even some finite-horizon objectives. I won't dive more into
-details (for now).
-{{% /toggle_block %}}
+{{< /boxed >}}
 
 
 Our first reflex should be to check that this definition actually makes sense - that is, the limit exists and is bounded. 
@@ -160,29 +155,38 @@ $$
 	Note that under this construction, the policy $\pi'=(d'_1, \ldots)$ depends on the initial state $x$. Based on this construction a forward recurrence is enough to prove the result
 {{% /toggle_block %}}
 
-In eye of the previous re-writing of $v\_\lambda^\pi$, this will mark our first important result of this series, marking the 
-first step towards trimming the very large space of history-dependent policies. Indeed, we just showed that for any $\pi\in\Pi^{\text{HR}}$ and $s\in\mathcal{S}$,
+In eye of the previous re-writing of $v\_\lambda^\pi$, this will mark our first important result of this series, taking the 
+first step towards trimming down the very large space of history-dependent policies. Indeed, we just showed that for any $\pi\in\Pi^{\text{HR}}$ and $s\in\mathcal{S}$,
 we can construct some $\pi'\in\Pi^\text{MR}$ such that $v\_\lambda^\pi(s) = v\_\lambda^{\pi'}(s).$ Therefore, it is definitely enough to focus only on 
 $\Pi^\text{MR}$, which is a much smaller policy class compared to $\Pi^\text{HR}$!
 
+{{% toggle_block background-color="#CBE4FE" title="Note" %}}
+We focus here on the discounted objective, not because of its practical relevance
+but rather because of its practical _usefulness_: it makes up for an easy analysis and approximates well
+other criterion - such as the stationary-reward objective, or even some finite-horizon objectives. I won't dive more into
+details (for now).
+{{% /toggle_block %}}
+
+
 ### Vectorial Notations
 We now introduce some notations that will allow us some more compact writing.
-Let $\mathcal{V}$ be the space of bounded functions mapping the $\mathcal{S}$ to $\mathbb{R}$. 
+Let $\mathcal{V}$ be the space of bounded functions mapping $\mathcal{S}$ to $\mathbb{R}$. 
 When $\mathcal{S}$ is _finite_ - _i.e_ $\vert \mathcal{S} \vert = n\in\mathbb{N}$, we can represent such functions 
-as $n$-dimensional vectors. Indeed, writing $\mathcal{S} = \{ s^1, \ldots, s^n\}$ and for 
-$f\in\mathcal{V}$ we will denote;
+as $n$-dimensional vectors. Indeed, writing $\mathcal{S} = \\{ s^1, \ldots, s^n\\}$ we will associate for any 
+$f\in\mathcal{V}$ a vector $\mathbf{f}\in\mathbb{R}^n$ where;
         $$
-        		\forall i\in\{1, \ldots, n\}, \\; [f]\_i = f(x^i)\in\mathbb{R}\; .
+        		\forall i\in\{1, \ldots, n\}, \\; [\mathbf{f}]\_i = f(x^i)\in\mathbb{R}\; .
         $$
         
-In the finite case, we will identify $\mathcal{V}$ with $\mathbb{R}^n$ and use the so-called vectorial notation 
+In the finite case, we will therefore identify $\mathcal{V}$ with $\mathbb{R}^n$ and use the so-called vectorial notation 
 for finite MDPs to further reduce clutter. We list below such notations before giving out a few identities. 
+
 In the following, $d\in\mathcal{D}^\text{MR}$ is a Markovian randomized decision rule and $\pi\in\Pi^\text{MR}$. 
 The three main entities we will work with are the reward vector $\mathbf{r}\_{d}$, 
 the instantaneous transition matrix  $\mathbf{P}\_{d}$ and the transition matrix $\mathbf{P}\_{\pi}^{t}$. 
-In the following definitions we index the entries of vectors and matrix with $s,s'\in\mathcal{S}$.
+In the definitions to come, we index the entries of vectors and matrix with $s,s'\in\mathcal{S}$.
 
-{{< pseudocode title="Vector notations" >}}
+{{< boxed title="Vector notations" >}}
 $$
 \begin{aligned}
 			[\mathbf{r}_{d}]_s &:= \mathbb{E}_{a\sim d(s)} \left[r(s, a)\right]\; ,\\
@@ -190,10 +194,7 @@ $$
 			[\mathbf{P}_{\pi}^{t}]_{s,s'} &:= \mathbb{P}^\pi_s\left(s_t = s'\right)
 \end{aligned}
 $$
-{{< /pseudocode >}}
-        
-<br>
-<br>
+{{< /boxed >}}
 
 For instance, the entry located at the $s^{\text{th}}$ row  and $s'^{\text{th}}$ column of 
 $\mathbf{P}\_{d}$ evaluates the probability of transitioning from $s$ to $s'$ when following the randomised policy $d$. 
@@ -253,8 +254,3 @@ of $\lambda^{t-1}$ that always saves the day).
 
 ## Resources
 Most of this blog-post is a condensed version of [[Puterman. 94, Chapter 4&5](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470316887)]
-
-
-
-
-
