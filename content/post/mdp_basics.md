@@ -20,9 +20,10 @@ them for the sake of simplicity.
 ### Definition
 The first ingredients to a fully-observable, stationary MDP are a state space $\mathcal{S}$ and an action space $\mathcal{A}$. 
 As announced we will focus here on the case where $\mathcal{S}$, $\mathcal{A}$ are discrete -- that is, finite or countable.
-The _stationary_ dynamics between different states is encoded by some transition kernel $\mathcal{P}$, where:
+The _stationary_ dynamics between different states is encoded by some transition kernel $p(\cdot\vert s, a)$, where:
 $$
-    \mathcal{P}\_s^a(\cdot) = \mathbb{P}(s\_{t+1} = \cdot\vert s\_t=s, a\_t=a) \\; \text{ for any } t\geq 1\\; .
+    p(s'\vert s, a) = \mathbb{P}(s\_{t+1} = s'\vert s\_t=s, a\_t=a) \\; \text{ for any } t\geq 1, \\; s\in\mathcal{S}, 
+\\;a\in\mathcal{A}, \\;s'\in\mathcal{S}\\; .
 $$
 A stationary reward function $r(s, a)$ measures the quality of action $a$ when executed in state $s$. That's basically it;
 a MDP $\mathcal{M}$ is a collection of a state-space, an action-space, a probabilistic rule of transition to states from state-action pairs, 
@@ -30,7 +31,7 @@ and a measure of success through the reward function.
 {{< boxed title="MDP" >}}
 $$
 {
-    \mathcal{M} := (\mathcal{S}, \mathcal{A}, \mathcal{P}, r)
+    \mathcal{M} := (\mathcal{S}, \mathcal{A}, p, r)
 }
 $$
 {{< /boxed >}}
@@ -83,16 +84,16 @@ a computational standpoint.
 #### Important Notations
 
 Given an initial state $s\in\mathcal{S}$, the combination of any policy $\pi\in\Pi^{\text{HR}}$ 
-with the transition probability kernels $\mathcal{P}$ induces a probability measure over the sequence of visited states and actions. 
+with the transition probability kernels $p$ induces a probability measure over the sequence of visited states and actions. 
 We will use the shorthand notation $\mathbb{P}_s^{\pi}$ to denote this probability measure - and some derived measures, 
 _e.g._ the probability measure obtained by marginalising over the states. For instance, 
 when $\pi=(d\_1,\ldots,)\in\Pi^{\text{HR}}$ we will note; 
 $$
-\mathbb{P}\_s^{ \pi}\left(s\_{t+1}=s'\right) = \mathbb{P}\left(s\_t=s'\middle\vert s\_1=s, \\; a\_i \sim d\_i(h\_i),  \\; s\_{i+1}\sim\mathcal{P}\_t(s\_{i}, a\_{i}, \cdot) \text{ for } i\leq t\right)\\; .
+\mathbb{P}\_s^{ \pi}\left(s\_{t+1}=s'\right) = \mathbb{P}\left(s\_t=s'\middle\vert s\_1=s, \\; a\_i \sim d\_i(h\_i),  \\; s\_{i+1}\sim p\_t(\cdot\vert s\_{i}, a\_{i}) \text{ for } i\leq t\right)\\; .
 $$
 We will adopt similar notations when reasoning about expectations; for instance:
 $$
-\mathbb{E}_s^{\pi}\left[r(s\_t,a\_t)\right] = \mathbb{E}\left[r(s\_t,a\_t)\middle\vert s\_1=s, \\; a\_i \sim d\_i(h\_i),  \\; s\_{i+1}\sim\mathcal{P}\_t(s\_{i}, a\_{i}, \cdot) \text{ for } i\leq t\right] \\;.
+\mathbb{E}_s^{\pi}\left[r(s\_t,a\_t)\right] = \mathbb{E}\left[r(s\_t,a\_t)\middle\vert s\_1=s, \\; a\_i \sim d\_i(h\_i),  \\; s\_{i+1}\sim p\_t(\cdot\vert s\_{i}, a\_{i}) \text{ for } i\leq t\right] \\;.
 $$
 
 ### Discounted Objective

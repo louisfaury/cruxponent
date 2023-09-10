@@ -25,7 +25,7 @@ $$
 and forming the stationary policy $\pi^\star = (d^\star , d^\star, \ldots)$.
 
 {{% toggle_block background-color="#CBE4FE" title="Note" %}}
-Remember that we impose a component-wise partial ordering for vectors--the above maximisation program must be carried out component by component.
+Remember that we impose a component-wise partial ordering for vectors. The above maximisation program must therefore be carried out component by component.
 {{% /toggle_block %}}
 <br>
 
@@ -285,7 +285,7 @@ We have so far avoided any discussion around computation cost. It's
 fairly easy to establish that running each algorithm for $T$ steps roughly requires the following number of operations:
 $$
 \begin{aligned}
-\text{V.I } \quad \longrightarrow \quad &\mathcal{O}(T\vert\mathcal{S}\vert^2\vert\mathcal{A}\vert)& \\;,\\\
+\text{V.I } \quad \longrightarrow \quad &\mathcal{O}(T\vert\mathcal{S}\vert^2\vert\mathcal{A}\vert) \\;,\\\
 \text{P.I } \quad \longrightarrow \quad & \mathcal{O}(T\vert\mathcal{S}\vert^2\vert\mathcal{A}\vert + T \vert \mathcal{S} \vert^3)\\;.
 \end{aligned}
 $$
@@ -338,7 +338,7 @@ $$
 \end{aligned}
 $$
 since by definition 
-$d\_{t+1}(s) \in \argmax\_{a\in\mathcal{A}} \Big\\{ r(s,a) + \lambda\sum\_{s'\in\mathcal{S}} \mathbb{P}(s\_{t+1}=s'\vert s\_t=s, a\_t=a) v\_{t}(s')\Big\\}$
+$d\_{t+1}(s) \in \argmax\_{a\in\mathcal{A}} \Big\\{ r(s,a) + \lambda\sum\_{s'\in\mathcal{S}} \mathbb{P}(s\_{t+1}=s'\vert s\_t=s, a\_t=a) v\_{t}(s')\Big\\}$.
 
 #### Actor-Critic Algorithms
 Most deep-learning based actor-critic algorithms (_e.g._ PPO, SAC) rely on the GPI framework. Parametric policies
@@ -346,16 +346,16 @@ $\pi\_\theta$ are improved via gradient-based optimisation (thanks to some [poli
 while another parametric function $v\_\phi$ is trained to estimate $v\_\lambda^{\pi\_\theta}$ via, _e.g._
 Bellman residual minimisation:
 $$
-\phi \in\argmin \sum\_{s} (v\_\phi(s) - r(s, a) - \lambda v\_\phi(s'))^2\\;, \qquad a\sim\pi_\theta(s), \\;s'\sim\mathcal{P}\_s^a(\cdot)\\; .
+\phi \in\argmin \sum\_{s} \left(v\_\phi(s) - r(s, a) - \lambda v\_\phi(s')\right)^2\\;, \qquad a\sim\pi_\theta(s), \\;s'\sim p\_t(\cdot\vert s, a)\\; .
 $$
 
 #### Others
 Without jumping all the way to modern deep-learning approaches, several mechanisms have been devised to perform each step (evaluation and improvement) as quickly as possible while retaining most
-of the PI's performances (_e.g_ Prioritised Value Iteration).
+of the PI's performances (_e.g._ Prioritised Value Iteration).
 The interested reader is referred to \[[Mausam & Kolobov, 2012](https://link.springer.com/book/10.1007/978-3-031-01559-5#toc)\] for a detailed review.
 
 ## Resources
-Most of this blog-post is a condensed version of [[Puterman. 94, Chapter 6](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470316887)]
+The description of VI and PI is a condensed version of [[Puterman. 94, Chapter 6](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470316887)]
 
 
 

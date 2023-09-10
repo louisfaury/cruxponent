@@ -44,7 +44,7 @@ Let $\pi=(d, d, \ldots)\in\mathcal{S}^\text{MD}$ a stationary policy.
 Then, its expected discounted value $v\_\lambda^\pi$ is the _unique_ bounded function from $\mathcal{S}$ to $\mathbb{R}$ which satisfies for all $s\in\mathcal{S}$;
 
 $$ 
- v\_\lambda^\pi(s) =  r(s, d(s)) + \lambda\mathbb{E}\big[v\_\lambda^\pi(s')\big]  \text{  where } s'\sim \mathcal{P}\_s^{d(s)}(\cdot)\\; .
+ v\_\lambda^\pi(s) =  r(s, d(s)) + \lambda\mathbb{E}\big[v\_\lambda^\pi(s')\big]  \text{  where } s'\sim p(\cdot\vert s, d(s))\\; .
 $$
 
 
