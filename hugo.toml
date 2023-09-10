@@ -49,11 +49,11 @@ tags = "tags"
 ########################
 
 [params]
-description = "Personal logs on Statistics, ML & RL." # website description
+description = "Personal logs on Control, Reinforcement Learning and Statistics." # website description
 favicon = "" # path to website icon, relative to ./static
 footnote = """
 """ # notes in the website footer
-keywords = ["ml", "rl", "statistics"] # website keywords
+keywords = ["control", "reinforcement learning", "statistics"] # website keywords
 
 customCSS = []            # path to custom css files, relative to ./static
 customJS = []             # path to custom js files, relative to ./static
