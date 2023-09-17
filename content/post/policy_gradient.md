@@ -2,7 +2,7 @@
 author = "Louis Faury"
 title = "A Tale of Policy Gradients"
 description = "A short theoretical dive in Policy Gradients"
-date = "2023-06-21"
+date = "2023-01-21"
 +++
 
 This post covers the derivation of several policy gradients expressions.
