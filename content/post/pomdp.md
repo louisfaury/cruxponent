@@ -21,7 +21,7 @@ therefore base its actions only on said observations, without perfect state know
 Before discussing the main implications
 behind this stark difference with fully observed MDPs, let's first clarify what we mean by observations. 
 We will stay true to our [MDP series](../mdp_basics)
-and stick with finite state and actions spaces. Similarly, the observation space will remain finite.
+and stick with finite state and actions spaces for simplicity. Similarly, the observation space will remain finite.
 
 ### Observation model 
 The basic ingredients of MDPs are still relevant for POMDPs. From our MDP series we will keep our notations for the state space 
