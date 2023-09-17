@@ -1,7 +1,7 @@
 +++
 author = "Louis Faury"
 title = "Partial Observability and Belief in MDPs"
-date = "2022-11-05"
+date = "2023-02-05"
 +++
 
 Partially Observable MDPs allow to model sensor noise, data occlusion, .. in 
@@ -10,7 +10,6 @@ this richer interaction setting seems to invalidate the fundamental theorem of M
 The goal of this post is to nuance this last statement: we will detail how POMDPs really are just "large" MDPs and therefore enjoy many of the same features.
 
 <!--more-->
-<br>
 
 ## PODMPs
 
