@@ -120,7 +120,7 @@ Our current gradient expression can be further simplified by observing that is c
 bunch of terms that do not contribute _in expectation_. Indeed note that if $k<t$:
 $$
 \begin{aligned}
-\mathbb{E}\_{\tau\sim \mathcal{T}\_\theta}\left[r(s\_k, a\_k)  \nabla\_\theta\log\pi_\theta(a\_t \vert s\_t )\right]\\, .
+\mathbb{E}\_{\tau\sim \mathcal{T}\_\theta}\left[r(s\_k, a\_k)  \nabla\_\theta\log\pi_\theta(a\_t \vert s\_t )\right] = 0 \\, .
 \end{aligned}
 $$
 

@@ -119,7 +119,6 @@ tracking the conditional probability of the POMDP's state.
 
 ### The belief-state
 
-
 To introduce the belief-state, we'll go back to the definition of the discounted reward criterion. 
 The main idea is to realise that the objective only depends on the state distribution, conditioned on its history.
 Indeed, for any policy $\pi\in\Pi^\text{HR}$:
