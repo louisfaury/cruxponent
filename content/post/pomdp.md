@@ -74,19 +74,20 @@ $$
 $$
 where the expectation is now also taken over realisations of the different observations. It is clear that to perform well, 
 an agent must try to infer what the current state likely is, and take actions accordingly.
-
-We use the discounted return to illustrate our discussions. Other criteria will yield the same conclusions. 
+ 
 
 {{% toggle_block background-color="#CBE4FE" title="Note" %}}
 The dependence of the state-value function on some state can be confusing. What's the point of evaluating this
 quantity if the state is anyway unknown to us? Actually, we often assume that the _first_ state is known. Equivalently, 
 we can hypothesize that it is drawn according to some known initial distribution.
+
+We use the discounted return to illustrate our discussions. Other criteria yield the same conclusions.
 {{% /toggle_block %}}
 
 ## Challenges
 As we saw in an [earlier blog-post](../mdp_basics_2), under full observability (that is, $\mathcal{S}=\Omega$ and $q(\omega\vert s) = \mathbf{1}(\omega=s)$) 
 there exist optimal stationary policies. This proved particularly helpful as solving the MDP boiled down to finding one optimal 
-decision-rule $d^\star\in\mathcal{D}^\text{MD}$. Unfortunately, this amazing property is lost when observability is only partial. 
+decision-rule $d^\star\in\mathcal{D}^\text{MD}$. Unfortunately, this engaging property is lost when observability is only partial. 
 In all generality, one would need to remember the whole history in order to be optimal. Formally we are saying that in POMDPs:
 $$
 	\sup\_{\pi\in\Pi^\text{HR}}v\_\lambda^\pi(s) > \max\_{\pi\in\mathcal{S}^\text{MD}}v\_\lambda^\pi(s)\\; .
@@ -113,9 +114,9 @@ from a computational side!
 ## Belief MDPs
 The previous section bore some pretty bad news, as stationary policies are off the table if we are to preserve optimality. 
 In this section we will see that the true story is a bit more nuanced. 
-In particular, we will soon see that any finite POMDPs is _equivalent_ to a continuous MDP -- which by nature does admit an optimal stationary policy. 
-The state of this MDP is a so-called **belief-state** (or information state): it is a _sufficient summary statistic_ of the history, 
-tracking the conditional probability of the POMDP's state.
+In particular, we'll understand that any finite POMDPs is _equivalent_ to a continuous, fully observed MDP -- which does admit an optimal stationary policy. 
+This MDP's state is the so-called **belief-state** (or information-state): it is a _sufficient summary statistic_ of the history, 
+tracking the probability mass function of the POMDP's state.
 
 ### The belief-state
 
@@ -257,23 +258,22 @@ $
 	d : \mathcal{B}=\Delta_{ \mathcal{S}} \mapsto \mathcal{A}\\;.
 $
 Once an optimal stationary policy
-$\pi^\star$ has been found in the belief-MDP, it can be exported to the original POMDP $\mathcal{M}$. At every round $t$, after having playing $a\_{t-1}$
+$\tilde{\pi}^\star$ has been found in the belief-MDP, it can be exported to the original POMDP $\mathcal{M}$. At every round $t$, after having playing $a\_{t-1}$
 and observed $\omega\_t$, we 
-simply need to compute the belief (according to the aforementioned update rule) and apply $\pi^\star$. From the point
-of view of the POMDP $\mathcal{A}$, the resulting policy is non-stationary. However, it relies on a policy which is
-stationary in $\widetilde{\mathcal{M}}$. 
+simply need to compute the belief (according to the aforementioned update rule) and apply $\tilde\pi^\star$. (Observe that for the POMDP $\mathcal{M}$, the resulting policy is actually non-stationary.)
 
 ### Computational challenges
 Given some POMDP, we can study its equivalent belief-MDP which has the nice property of being fully observed. 
 This is rather pleasant, as we are left with finding stationary optimal policies for the belief-MDP. 
-We saw some classical control algorithms for MDPs in [classical MDP control algorithms](../mdp_basics_3) that can do just that.
+We saw [in an earlier blog-post](../mdp_basics_3) some classical control algorithms for MDPs that can do just that. However, things are, 
+as often, slightly nuanced.
+Indeed, let's not forget that the belief-state lives in $\mathcal{B}=\Delta(\mathcal{S})$ which is _continuous_. 
+Algorithms like VI and PI won't apply directly to the belief-MDP. However, it is a very natural candidate for 
+discretisation, making it compatible with out-of-the box PI, for instance. 
 
-However, let's not forget that the belief-state lives in $\mathcal{B}=\Delta(\mathcal{S})$ which is _continuous_. 
-Algorithms like VI and PI won't apply directly to the belief MDP. 
-Actually, in all generality, finding an optimal policy in the belief-MDP is intractable because of the state space's continuous nature. 
-
-There are a bunch 
-of approximation methods out there; you can check out the awesome monograph of
+In all generality, finding an optimal policy in the belief-MDP is intractable because of the state space's continuous nature.
+Yet, most of the control work on POMDP out there relies on it; it is just more reasonable to rely on this formulation than to 
+blindly optimise for non-stationary policies. There are a bunch of approximation methods out there to solve belief-MDPs; you can check out the awesome monograph of
 \[[Cassandra, 1998](https://cs.brown.edu/research/pubs/theses/phd/1998/cassandra.pdf)\] for a (slightly outdated?) overview
 on such methods.
 
