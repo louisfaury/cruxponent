@@ -16,6 +16,9 @@ fashion are called _extensive-form_ games. The difference may seem thin, but dee
 For instance, once can find deterministic optimal policies in some extensive form games since the opponent's move is perfectly known.
 In normal-form games, some level of randomness is often required to prevent the opponent from guessing our moves.
 
+<br>
+{{< image src="/games.png" width="550px" align="center">}}
+<br>
 
 ## Agent Objectives
 Before diving into a game classification based on agents' observation models, let's discuss the different possibilities
@@ -42,6 +45,7 @@ Another important classification of games concerns the level of information acce
 their actions' impact on their environment. Below, we go up the hierarchy of multi-agents settings, from less to more general.
 This hierarchy evolves with the multi-agents' environment dynamic, their knowledge of each other and of the
 game's hidden state (if any). 
+
 
 ### Repeated Matrix Games
 A _matrix game_ can be represented via its number of player $n\in\mathbb{N}$, a combination of its agent action space: 
