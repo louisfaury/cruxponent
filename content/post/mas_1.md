@@ -50,12 +50,12 @@ game's hidden state (if any).
 ### Repeated Matrix Games
 A _matrix game_ can be represented via its number of player $n\in\mathbb{N}$, a combination of its agent action space: 
 $$\mathcal{A}=\mathcal{A}\_1\times\ldots\times\mathcal{A}\_n\\;,$$ 
-as well as a collection $\pmb{r} = (r^1, \ldots, r^n)$ of reward functions, each mapping
+as well as a collection $\bm{r} = (r^1, \ldots, r^n)$ of reward functions, each mapping
 $\mathcal{A}$ to $\mathbb{R}$. There is no notion of state; the agents' actions do not impact the environment in any way.
 
 {{< boxed title="Matrix game" >}} 
 $$
-\mathcal{M} = (n, \mathcal{A}, \pmb{r})\; .
+\mathcal{M} = (n, \mathcal{A}, \bm{r})\; .
 $$
 {{< /boxed >}}
 
@@ -63,16 +63,16 @@ A _repeated_ matrix game simply is the repetition of the same matrix game for $T
  
 
 {{< pseudocode title="Repeated Matrix Game" >}} 
-$\textbf{init } \text{game history } \pmb{h}_0 \leftarrow \emptyset\; .\\$
+$\textbf{init } \text{game history } \bm{h}_0 \leftarrow \emptyset\; .\\$
 $\textbf{for } t = 1, \ldots, T:\\$
 $\qquad \textbf{for } i = 1, \ldots, n:\\$
 $\qquad \qquad \text{agent } i \text{ places its action } a_t^i\\$
 $\qquad \textbf{end for}\\$
-$\qquad \text{the environment receives the joint action } \pmb{a}_t = (a_t^1, \ldots, a_t^n) \\$
+$\qquad \text{the environment receives the joint action } \bm{a}_t = (a_t^1, \ldots, a_t^n) \\$
 $\qquad \textbf{for } i = 1, \ldots, n:\\$
-$\qquad \qquad \text{agent } i \text{ receives } r_t^i = r^i(\pmb{a}_t)\\$
+$\qquad \qquad \text{agent } i \text{ receives } r_t^i = r^i(\bm{a}_t)\\$
 $\qquad \textbf{end for}\\$
-$\qquad \text{the game history gets updated } \pmb{h}_t \leftarrow \pmb{h}_{t-1} \cup \pmb{a}_t\\ $
+$\qquad \text{the game history gets updated } \bm{h}_t \leftarrow \bm{h}_{t-1} \cup \bm{a}_t\\ $
 $\textbf{end for}\\$
 {{< /pseudocode >}}
 
@@ -80,10 +80,10 @@ $\textbf{end for}\\$
 <br> 
 
 This is a perfect knowledge game; each agent has access to the others' previous actions. 
-At each round $t$, each agent can base its decision $a\_t^i$ based on the game's full history $\pmb{h}\_{t-1}$.
+At each round $t$, each agent can base its decision $a\_t^i$ based on the game's full history $\bm{h}\_{t-1}$.
 A valid decision rule $d\_t^{\\,i}$ for agent $i$ therefore maps said history to a distribution over $\mathcal{A}\_i$.
 A collection of agent decision-rules form the marginal policy $\pi^i = (d\_1^{\\,i}, d\_2^{\\,i}, \ldots)$. The _joint_ policy is: 
-$$\pmb{\pi} = (\pi^1, \ldots ,\pi^n)\\; .$$ 
+$$\bm{\pi} = (\pi^1, \ldots ,\pi^n)\\; .$$ 
 
 {{% toggle_block background-color="#CBE4FE" title="Note" %}}
 When there is only a single agent, a repeated matrix game is nothing more than a bandit game.
@@ -95,32 +95,32 @@ which lives in some set $\mathcal{S}$. The definition extends the classical MDP 
 having the transition kernel now depends on the joint action:
 $$
 \begin{aligned}
-    p(\cdot \vert s, \pmb{a}) &= \mathbb{P}(s\_{t+1}=\cdot \vert s\_t=s, \pmb{a}\_t = a)\\\
+    p(\cdot \vert s, \bm{a}) &= \mathbb{P}(s\_{t+1}=\cdot \vert s\_t=s, \bm{a}\_t = a)\\\
 &= \mathbb{P}(s\_{t+1}=\cdot \vert s\_t=s, a\_t^1=a^1, \ldots, a\_t^n = a^n)\\;.
 \end{aligned}
 $$
 The reward functions now map $\mathcal{S}\times\mathcal{A}$ to $\mathbb{R}$. 
 {{< boxed title="Stochastic game" >}} 
 $$
-\mathcal{M} = (n, \mathcal{S}, \mathcal{A}, p, \pmb{r})\; .
+\mathcal{M} = (n, \mathcal{S}, \mathcal{A}, p, \bm{r})\; .
 $$
 {{< /boxed >}}
 
 
 {{< pseudocode title="Stochastic Game" >}} 
-$\textbf{init } \text{state } s_1\in\mathcal{S}, \text{ game history } \pmb{h}_0 \leftarrow \emptyset\; .\\$
+$\textbf{init } \text{state } s_1\in\mathcal{S}, \text{ game history } \bm{h}_0 \leftarrow \emptyset\; .\\$
 $\textbf{for } t = 1, \ldots, T:\\$
 $\qquad \textbf{for } i = 1, \ldots, n:\\$
 $\qquad \qquad \text{agent } i \text{ observes the state }s_t \text{ and places its action } a_t^i\\$
 $\qquad \textbf{end for}\\$
-$\qquad \text{the environment receives the joint action } \pmb{a}_t = (a_t^1, \ldots, a_t^n) \\$
+$\qquad \text{the environment receives the joint action } \bm{a}_t = (a_t^1, \ldots, a_t^n) \\$
 $\qquad \textbf{for } i = 1, \ldots, n:\\$
-$\qquad \qquad \text{agent } i \text{ receives } r_t^i = r^i(\pmb{a}_t)\\$
+$\qquad \qquad \text{agent } i \text{ receives } r_t^i = r^i(\bm{a}_t)\\$
 $\qquad \textbf{end for}\\$
-$\qquad \text{the game history gets updated } \pmb{h}_t \leftarrow \pmb{h}_{t-1} \cup \{ s_t, \, \pmb{a}_t\}\\ $
+$\qquad \text{the game history gets updated } \bm{h}_t \leftarrow \bm{h}_{t-1} \cup \{ s_t, \, \bm{a}_t\}\\ $
 $\qquad \text{the environment state transitions: } \\$
 $$
-s_{t+1} \sim p(\cdot\vert  s_t, \pmb{a}_t)
+s_{t+1} \sim p(\cdot\vert  s_t, \bm{a}_t)
 $$
 $\textbf{end for}\\$
 {{< /pseudocode >}}
@@ -134,7 +134,7 @@ In other words, at round $t$ a valid decision-rule for some agent will be:
 $$
 \begin{aligned}
 d\_t^{\\, i} : (\mathcal{S}\times\mathcal{A})^{t-1}\times\mathcal{S} &\mapsto \Delta(\mathcal{A})\\; ,\\\
-\pmb{h}\_{t-1}, s\_t &\mapsto d\_t^{\, i}(\pmb{h}\_{t-1}, s\_t)  \\; .
+\bm{h}\_{t-1}, s\_t &\mapsto d\_t^{\, i}(\bm{h}\_{t-1}, s\_t)  \\; .
 \end{aligned}
 $$
 
@@ -155,15 +155,15 @@ with an additional _synchronisation_ challenge.
 Partially observable stochastic games (POSGs) are the most general form of normal form games, and extend the notion of POMDPs 
 to multi-agent setting. The additional ingredients to go from a stochastic game to a partially
 observable stochastic game are _(1)_ a combinatorial observation space $\Omega = \Omega\_1\times\ldots\times\Omega\_n$ and 
-_(2)_ an observation kernel $q(\cdot \vert s, \pmb{a})$ defined as: 
+_(2)_ an observation kernel $q(\cdot \vert s, \bm{a})$ defined as: 
 $$
-q(\pmb{\omega} \vert s, \pmb{a}) = \mathbb{P}\left(\pmb{\omega}\_t = \pmb{\omega} \vert s\_t = s, \pmb{a}\_{t-1}=\pmb{a} \right)
-,\quad \forall\pmb{\omega} = (\omega^1, \ldots, \omega^n)\in\Omega\\; .
+q(\bm{\omega} \vert s, \bm{a}) = \mathbb{P}\left(\bm{\omega}\_t = \bm{\omega} \vert s\_t = s, \bm{a}\_{t-1}=\bm{a} \right)
+,\quad \forall\bm{\omega} = (\omega^1, \ldots, \omega^n)\in\Omega\\; .
 $$
 
 {{< boxed title="Partially observable stochastic game" >}} 
 $$
-\mathcal{M} = (n, \mathcal{S}, \mathcal{A}, \Omega, p, q, \pmb{r})\; .
+\mathcal{M} = (n, \mathcal{S}, \mathcal{A}, \Omega, p, q, \bm{r})\; .
 $$
 {{< /boxed >}}
 
@@ -171,18 +171,18 @@ $$
 {{< pseudocode title="Partially Observable Stochastic Game" >}} 
 $\textbf{init } \text{state } s_1\in\mathcal{S}, \text{ agents histories } {h}_0^1 \leftarrow \emptyset, \ldots, {h}_0^n \leftarrow \emptyset\; .\\$
 $\textbf{for } t = 1, \ldots, T:\\$
-$\qquad \text{the environment generates the joint observation vector } \pmb{\omega}_t \sim q(\cdot \vert s_t, \pmb{a}_{t-1})\\$
+$\qquad \text{the environment generates the joint observation vector } \bm{\omega}_t \sim q(\cdot \vert s_t, \bm{a}_{t-1})\\$
 $\qquad \textbf{for } i = 1, \ldots, n:\\$
 $\qquad \qquad \text{agent } i \text{ observes } \omega_t^i \text{ and places its action } a_t^i\\$
 $\qquad \textbf{end for}\\$
-$\qquad \text{the environment receives the joint action } \pmb{a}_t = (a_t^1, \ldots, a_t^n) \\$
+$\qquad \text{the environment receives the joint action } \bm{a}_t = (a_t^1, \ldots, a_t^n) \\$
 $\qquad \textbf{for } i = 1, \ldots, n:\\$
-$\qquad \qquad \text{agent } i \text{ receives } r_t^i = r^i(\pmb{a}_t)\\$
+$\qquad \qquad \text{agent } i \text{ receives } r_t^i = r^i(\bm{a}_t)\\$
 $\qquad\qquad \text{agent } i \text{ history gets updated: } h_t^i \leftarrow h_{t-1}^i \cup \{\omega_t^i, \, a_t^i\}\\$
 $\qquad \textbf{end for}\\$
 $\qquad \text{the environment state transitions: } \\$
 $$
-s_{t+1} \sim p(\cdot\vert  s_t, \pmb{a}_t)
+s_{t+1} \sim p(\cdot\vert  s_t, \bm{a}_t)
 $$
 $\textbf{end for}\\$
 {{< /pseudocode >}}
