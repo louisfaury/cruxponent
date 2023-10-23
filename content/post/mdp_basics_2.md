@@ -10,16 +10,13 @@ policies are enough for optimal control!
 <!--more-->
 
 
-
-{{< boxed title="" >}}
-Before diving in, make sure you've read the previous blog-post on MDPs. Recall that we use vectorial notations,
+{{< infoblock>}}
+$\;\;\;$ Before diving in, make sure you've read the previous blog-post on MDPs. Recall that we use vectorial notations,
 and adopt the usual partial ordering over $\mathbb{R}^n$:
 $$
  x \geq y \Longleftrightarrow x_i \geq y_i \; \text{ for all } i\in\{1,\ldots, n\} \; .
 $$
-{{< /boxed >}}
-
- 
+{{< /infoblock>}}
 
 Our ultimate goal here is to derive some _characterisation_ of an optimal policy for a discounted MDP. Said optimal policy 
 would check:
