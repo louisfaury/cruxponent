@@ -214,7 +214,7 @@ Dec-POMDPs have arguably been one of the main centres of interest in the Multi-A
 Indeed, the cooperative nature of such games
 (agents are optimising a common reward) removes the need for more ambiguous game-theoretic objectives. This allows 
 one to focus on the development of algorithms that allows emergent coordination and communication mechanisms between agents. 
-This cannot be done by direct extension of pure POMDPs (which is a Dec_POMDP with $n=1$). Indeed, the necessity of deploying decentralised policies 
+This cannot be done by direct extension of pure POMDPs (which is a Dec-POMDP with $n=1$). Indeed, the necessity of deploying decentralised policies 
 clashes with [typical control methods for POMDPs](../pomdp); for instance, an agent-wise belief can no longer be computed (at least not without some approximations).
 
 

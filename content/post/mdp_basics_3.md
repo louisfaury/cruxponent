@@ -254,9 +254,9 @@ Hint: For that last step, recall that since $\mathbf{P}\_{d\_{\textnormal t+1}}$
 	
 
 
-It turns that in our finite setting this is enough to guarantee the convergence of PI in a _finite number of iterations_. 
-Indeed, in the finite case there exists only a finite number of decision-rules (precisely $\vert\mathcal{A}\vert^{\vert\mathcal{S}\vert}$ many ones) 
-and the PI algorithm exhaust them in increasing order of their discounted return.
+It turns out that in our finite setting this is enough to guarantee the convergence of PI in a _finite number of iterations_. 
+Indeed, in the finite case, there exists only a finite number of decision-rules (precisely $\vert\mathcal{A}\vert^{\vert\mathcal{S}\vert}$ many ones) 
+and the PI algorithm exhausts them in increasing order of their discounted return.
 Note that no loop over the policies can arise since the equality case 
 $v\_\lambda^{\pi\_{t+1}} \leq J\_\lambda^{\pi\_{t}}$ implies that:
 $$
@@ -268,7 +268,7 @@ and therefore that $v\_\lambda^{\pi\_{t}}=v\_\lambda^\star$ -- meaning that the 
 {{< image src="/pi.png" width="450px" align="center">}}
 <br>
 
-This finite-time convergence of course does not extend to countable MDPs, where the number of policies is (countably) infinite.
+This finite-time convergence, of course, does not extend to countable MDPs, where the number of policies is (countably) infinite.
 It's however fairly straightforward to also establish convergence rates for the PI algorithm; one will find out that, 
 as VI, it enjoys linear convergence.
 
