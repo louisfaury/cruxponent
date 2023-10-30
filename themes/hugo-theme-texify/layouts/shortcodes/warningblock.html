@@ -1,0 +1,26 @@
+<style>
+  .warning-block {
+    position: relative;
+    background-color: #f5cbcb;
+    padding: 20px;
+    word-wrap: break-word;
+    font-style: normal;
+  }
+
+  .warning-block .title-frame {
+    position: absolute;
+    top: -0px;
+    left: 0;
+    padding: 12px;
+    font-size: 14px;
+    background-color: #f5cbcb;
+    color: #ef0808;
+    font-style: normal;
+    font-weight: bolder;
+  }
+</style>
+
+<div class="warning-block">
+  {{ .Inner }}
+  <div class="title-frame">{{ "⚠" }}</div>
+</div>
