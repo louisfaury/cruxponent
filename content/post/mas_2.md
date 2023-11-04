@@ -1,10 +1,10 @@
 +++
 author = "Louis Faury"
-title = "Multi-Agent Dynamical Systems (2/3)"
+title = "Multi-Agent Dynamical Systems (2/4)"
 date = "2023-10-21"
 +++
 
-This second blog-post of the Multi-Agent series is dedicated to _solution concepts_: how we can characterize and compare different joint policies. 
+This second blog-post of the multi-agent series is dedicated to _solution concepts_: how we can characterize and compare different joint policies. 
 We will cover Pareto optimality, the definition and existence of Nash equilibrium,
 as well as the minimax theorem in two-agents zero-sum games.
 
