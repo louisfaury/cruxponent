@@ -1,4 +1,4 @@
-baseURL = 'https://cruxponent.netlify.app/'
+baseURL = 'https://cruxponent.com/'
 disqusShortname = ""                      # disqus shortcode
 enableGitInfo = false                     # retrieve last modified date from git commits
 enableRobotsTXT = true                    # /robots.txt
