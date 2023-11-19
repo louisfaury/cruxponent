@@ -1,6 +1,6 @@
 +++
 author = "Louis Faury"
-title = "Multi-Agent Dynamical Systems (1/4)"
+title = "Multi-Agent Dynamical Systems (1/3)"
 date = "2023-09-10"
 +++
 

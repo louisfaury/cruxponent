@@ -1,6 +1,6 @@
 +++
 author = "Louis Faury"
-title = "Multi-Agent Dynamical Systems (2/4)"
+title = "Multi-Agent Dynamical Systems (2/3)"
 date = "2023-10-21"
 +++
 
@@ -19,7 +19,7 @@ While each agent tries to maximise its own return or utility, asking said observ
 $\quad$
 We will adopt the notations of the first post and some notations from our MDP series. Further, for the sake of simplicity, we assume finite games. That is, 
 the state, action and observation spaces are all discrete and finite:
-$\mathcal{S} \times \mathcal{A} \times \Omega < \infty$.
+$\vert\mathcal{S}\vert \times \vert\mathcal{A}\vert \times \vert\Omega\vert < \infty$.
 {{< /infoblock >}}
 
 
