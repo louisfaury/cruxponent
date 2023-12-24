@@ -43,6 +43,9 @@ weight = 2
 series = "series" # see https://gohugo.io/templates/internal/#open-graph
 tags = "tags"
 
+[services]
+  [services.googleAnalytics]
+    ID = 'G-4N03ZESV22'
 
 ########################
 # TEXIFY THEME OPTIONS #
@@ -73,3 +76,4 @@ script = """
 [params.math]
 enable = true # whether to enable math typesetting
 use = "katex"  # katex or mathjax
+
