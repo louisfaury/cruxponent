@@ -5,8 +5,8 @@ date = "2023-12-10"
 +++
 
 This blog-post is the first of a short series on the modern algorithmic Reinforcement Learning landscape. 
-The series' objective is **1)** to lay out the borders of some "boxes" where one can fit most modern RL 
-algorithms, **2)** define said boxes' content in an almost self-contained fashion and **3)** discuss each algorithmic family's strengths and weaknesses.
+The series' objective is 1) to lay out the borders of some "boxes" where one can fit most modern RL 
+algorithms, 2) define said boxes' content in an almost self-contained fashion and 3) discuss each algorithmic family's strengths and weaknesses.
 This first post provides a very brief description of what those boxes are.
 
 <!--more-->
@@ -27,11 +27,10 @@ What distinctively differentiates RL algorithms is what they fundamentally try t
 This can be:
 - the optimal value-function, 
 - the optimal policy, 
-- the unknown MDP generating experience, 
-
+- the unknown MDP generating experience,
 or a combination thereof.
 This yields a myriad of approaches with many moving pieces, making it sometimes hard (in my opinion) 
-to develop a cold, classification-based understanding of different techniques.
+to develop a cold classification-based understanding of different techniques.
 Below, we briefly cover each one of the three algorithmic "boxes", their origins and overlaps. 
 Future post will dive deeper into each box. 
 
@@ -88,5 +87,5 @@ The idea is somewhat simple; if we have learned a good model for the MDP, then w
 
 
 Most theory-backed algorithms (_i.e_ algorithms with provable finite-time performance guarantees) are relying on model-based approaches. 
-Of course, most often, said algorithms operate on tabular / small MDPs, and often with confining assumptions.
+Of course, most often, said algorithms operate on tabular / small MDPs, and under strong confining assumptions.
 
