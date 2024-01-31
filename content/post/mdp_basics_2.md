@@ -247,11 +247,11 @@ $$
 <br>
 
 ## Optimal Policies
-When it comes to optimality we have so far focused on history-dependent randomised policies, then on Markov randomised policies. 
-From a computational standpoint it would be desirable to be able to restrict this policy space even further--and focus 
+When it comes to optimality, we have so far focused on history-dependent randomised policies, then on Markov randomised policies. 
+From a computational standpoint, it would be desirable to be able to restrict this policy space even further--and focus 
 only on stationary policies. Indeed, a stationary policy is made up of a single decision-rule and 
 is therefore easy to store and update. 
-For this restriction to be principled we are missing one fundamental result which ensures that the optimal discounted cost is attained by a stationary policy. 
+For this restriction to be principled, we are missing one fundamental result which ensures that the optimal discounted cost is attained by a stationary policy. 
 We will need  the notion of a _conserving_ decision-rule; we say that $d^\star\in\mathcal{D}^\text{MD}$ is conserving or $v\_\lambda^\star$-improving 
 if for all $s\in\mathcal{S}$;
 	
