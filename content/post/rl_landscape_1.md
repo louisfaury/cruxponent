@@ -1,6 +1,6 @@
 +++
 author = "Louis Faury"
-title = "RL Landscape: Introduction"
+title = "RL Landscape (1/?)"
 date = "2023-12-10"
 +++
 
@@ -12,7 +12,7 @@ This first post provides a very brief description of what those boxes are.
 <!--more-->
 
 {{< infoblock>}}
-$\quad$ The third post from our <a href="../mdp_basics_3">MDP Fundamental series</a> provides the relevant background to this post.
+$\quad$ The third post from our <a href="../mdp_basics_3" style="text-decoration:none; color:#0074aa;" ">MDP Fundamental series</a> provides the relevant background to this post.
 {{< /infoblock >}}
 
 Our discussion starts with the now famous drawing from David Silver's course:
