@@ -28,6 +28,7 @@ This can be:
 - the optimal value-function, 
 - the optimal policy, 
 - the unknown MDP generating experience,
+
 or a combination thereof.
 This yields a myriad of approaches with many moving pieces, making it sometimes hard (in my opinion) 
 to develop a cold classification-based understanding of different techniques.
