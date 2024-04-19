@@ -1,7 +1,7 @@
 +++
 author = "Louis Faury"
 title = "Oldies but goodies: Ergodic Theorem"
-date = "2024-02-11"
+date = "2024-04-19"
 +++
 
 The goal of this blog post is to provide a self-contained proof of the so-called fundamental theorem
