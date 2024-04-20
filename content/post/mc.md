@@ -82,7 +82,7 @@ $$
 (Recall that we are using line vector -- the above expression does make sense.) Iterating we obtain:
 $$
 \tag{1}
-\mathbf{p}^t(\cdot\vert x) = \mathbf{x}^\top \mathbf{P}^t\\; .
+\mathbf{p}\_t(\cdot\vert x) = \mathbf{x}^\top \mathbf{P}^t\\; .
 $$
 The main message is that by multiplying some distribution vector by $\mathbf{P}$ on the right, we are able
 to step the Markov chain by one unit of time. 
