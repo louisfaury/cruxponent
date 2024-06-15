@@ -237,9 +237,9 @@ agent $i$ can guarantee, regardless of its opponent's strategy.
 
 - The _minimax_ strategy sees things the other way around. When agent $i$ follows a minimax strategy, 
 it abandons the maximisation of its own return in order to minimize its opponent's value. 
-Formally, the maximin policy for agent $i$ is defined as:
+Formally, the minimax policy for agent $i$ is defined as:
 $$
-\pi\_i \in \argmin\_{\pi\_i} \max\_{\pi\_{-i}} v\_i(\pi\_i, \pi\_{-i})\\;,
+\pi\_i \in \argmin\_{\pi\_i} \max\_{\pi\_{-i}} v\_{-i}(\pi\_i, \pi\_{-i})\\;,
 $$
 and the minimax value as $\min\_{\pi_i} \max\_{\pi\_{-i}} v\_i(\pi\_i, \pi\_{-i})$.
 The minimax value is the maximum return agent $i$ can force on its opponent.
