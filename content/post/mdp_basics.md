@@ -89,11 +89,11 @@ We will use the shorthand notation $\mathbb{P}_s^{\pi}$ to denote this probabili
 _e.g._ the probability measure obtained by marginalising over the states. For instance, 
 when $\pi=(d\_1,\ldots,)\in\Pi^{\text{HR}}$ we will note; 
 $$
-\mathbb{P}\_s^{ \pi}\left(s\_{t+1}=s'\right) = \mathbb{P}\left(s\_t=s'\middle\vert s\_1=s, \\; a\_i \sim d\_i(h\_i),  \\; s\_{i+1}\sim p\_t(\cdot\vert s\_{i}, a\_{i}) \text{ for } i\leq t\right)\\; .
+\mathbb{P}\_s^{ \pi}\left(s\_{t+1}=s'\right) = \mathbb{P}\left(s\_{t+1}=s'\middle\vert s\_1=s, \\; a\_i \sim d\_i(h\_i),  \\; s\_{i+1}\sim p\_i(\cdot\vert s\_{i}, a\_{i}) \text{ for } i\leq t\right)\\; .
 $$
 We will adopt similar notations when reasoning about expectations; for instance:
 $$
-\mathbb{E}_s^{\pi}\left[r(s\_t,a\_t)\right] = \mathbb{E}\left[r(s\_t,a\_t)\middle\vert s\_1=s, \\; a\_i \sim d\_i(h\_i),  \\; s\_{i+1}\sim p\_t(\cdot\vert s\_{i}, a\_{i}) \text{ for } i\leq t\right] \\;.
+\mathbb{E}_s^{\pi}\left[r(s\_t,a\_t)\right] = \mathbb{E}\left[r(s\_t,a\_t)\middle\vert s\_1=s, \\; a\_i \sim d\_i(h\_i),  \\; s\_{i+1}\sim p\_i(\cdot\vert s\_{i}, a\_{i}) \text{ for } i\leq t\right] \\;.
 $$
 
 ### Discounted Objective

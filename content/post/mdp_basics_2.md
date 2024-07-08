@@ -147,7 +147,7 @@ Let $f\in\mathcal{V}$ such that for all $s\in\mathcal{S}$. The proof goes by est
 - $f = \mathcal{T}\_\lambda^\star(f)$ then $f = v\_\lambda^\star$,
 
 where we again adopt the classical partial ordering over vectors. Let's first prove the first claim. 
-Let $f(s) \geq \mathcal{T}\_\lambda^\star(f)$ for all $s\in\mathcal{S}$. Then for any $d\in\mathcal{D}^\text{MD}$:
+Let $f(s) \leq \mathcal{T}\_\lambda^\star(f)$ for all $s\in\mathcal{S}$. Then for any $d\in\mathcal{D}^\text{MD}$:
 $$
 \begin{aligned}
 		f &\leq \mathbf{r}\_{d} + \lambda\mathbf{P}\_{d}f\\; , \\\
@@ -165,21 +165,21 @@ for any $\pi = (d, \ldots) \in\mathcal{S}^\text{MD}$ (we just used the character
 Therefore: 
 $$f \leq \max\_{\pi\in\mathcal{S}^\text{MR}} v\_\lambda^\pi\leq \max\_{\pi\in\Pi^\text{HR}} v\_\lambda^\pi= v\_\lambda^\star\\; . $$
 
-We now prove the second claim. Observe that if $f \leq \mathcal{T}\_\lambda^\star(f)$ then for any $d\_1, d\_2, \ldots \in\mathcal{D}^\text{MR}$:
+We now prove the second claim. Observe that if $f \geq \mathcal{T}\_\lambda^\star(f)$ then for any $d\_1, d\_2, \ldots \in\mathcal{D}^\text{MR}$:
 $$
 \begin{aligned}
-f &\leq \mathbf{r}\_{d\_1} + \lambda\mathbf{P}\_{d\_1} f \\; \\\
-&\leq \mathbf{r}\_{d\_1} + \lambda\mathbf{P}\_{d\_1}\mathbf{r}\_{d\_2} + \lambda^2 \mathbf{P}\_{d\_2} f\\;, \\\
-&\leq \ldots \\\
-&\leq \sum\_{t=1}^\tau \lambda^{t-1}\mathbf{P}\_{\pi}^t\mathbf{r}\_{d\_t} + \lambda^\tau \mathbf{P}\_{\pi}^\tau\mathbf{r}\_{d\_\tau}\\; .
+f &\geq \mathbf{r}\_{d\_1} + \lambda\mathbf{P}\_{d\_1} f \\; \\\
+&\geq \mathbf{r}\_{d\_1} + \lambda\mathbf{P}\_{d\_1}\mathbf{r}\_{d\_2} + \lambda^2 \mathbf{P}\_{d\_2} f\\;, \\\
+&\geq \ldots \\\
+&\geq \sum\_{t=1}^\tau \lambda^{t-1}\mathbf{P}\_{\pi}^t\mathbf{r}\_{d\_t} + \lambda^\tau \mathbf{P}\_{\pi}^\tau\mathbf{r}\_{d\_\tau}\\; .
 \end{aligned}
 $$
 Since $\lambda < 1$ and $\mathbf{P}\_{\pi}^\tau$ is stochastic, we have $\lim_{\tau\to\infty}\lambda^\tau \mathbf{P}\_{\pi}^\tau\mathbf{r}\_{d\_\tau} = 0$ 
 and therefore:
 $$
-f \leq \sum\_{t=1}^\infty \lambda^{t-1}\mathbf{P}\_{\pi}^t\mathbf{r}\_{d\_t} = v\_\lambda^\pi\\; ,
+f \geq \sum\_{t=1}^\infty \lambda^{t-1}\mathbf{P}\_{\pi}^t\mathbf{r}\_{d\_t} = v\_\lambda^\pi\\; ,
 $$
-for any $\pi = (d\_1, d\_2 \ldots, ) \in\Pi^\text{MR}$. Hence $f\leq \max\_{\pi\in\Pi^\text{MR}}v\_\lambda^\pi =  \max\_{\pi\in\Pi^\text{HR}}v\_\lambda^\pi$. 
+for any $\pi = (d\_1, d\_2 \ldots, ) \in\Pi^\text{MR}$. Hence $f\geq \max\_{\pi\in\Pi^\text{MR}}v\_\lambda^\pi =  \max\_{\pi\in\Pi^\text{HR}}v\_\lambda^\pi$. 
 The third claim is easily obtained by combining the first two.
 {{% /toggle_block %}}
          
@@ -202,7 +202,7 @@ $$
 		&\leq \lambda\\|f-g\\|\_\infty\\; . & (\mathbf{P}\_{d} \text{ stochastic})
 \end{aligned}
 $$
-The fact that $\mathcal{T}\_\lambda^\star = \inf{d\in\mathcal{D}^\text{MD}} \mathcal{T}\_\lambda^d$ finishes the proof; indeed for all $f, g\in\mathcal{V}$ 
+The fact that $\mathcal{T}\_\lambda^\star = \sup\_{d\in\mathcal{D}^\text{MD}} \mathcal{T}\_\lambda^d$ finishes the proof; indeed for all $f, g\in\mathcal{V}$ 
 let $d\_f = \argmax \mathcal{T}\_\lambda^d f$. Then:
 $$
 	\begin{aligned}
@@ -210,7 +210,7 @@ $$
 		 &\leq \mathcal{T}\_\lambda^{d\_f}(f) -\mathcal{T}\_\lambda^{d\_f}(g)\\\; .
 \end{aligned}
 $$
-This mean that for any $s\in\mathcal{S}$ we have $$\mathcal{T}\_\lambda^\star(f)(s) - \mathcal{T}\_\lambda^\star(g)(s) \leq \mathcal{T}\_\lambda^{d\_f}(f)(s) -\mathcal{T}\_\lambda^{d\_f}(g)(s)$$.
+This mean that for any $s\in\mathcal{S}$ we have $$\mathcal{T}\_\lambda^\star(f)(s) - \mathcal{T}\_\lambda^\star(g)(s) \leq \mathcal{T}\_\lambda^{d\_f}(f)(s) -\mathcal{T}\_\lambda^{d\_f}(g)(s)\\;.$$
 Assuming for now that $\mathcal{T}\_\lambda^\star(f)(s) - \mathcal{T}\_\lambda^\star(g)(s)\geq 0$ yields that:
 $$
 \begin{aligned}

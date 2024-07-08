@@ -17,7 +17,7 @@ Recall the classical definitions for state / state-action value functions:
 $$
 \begin{aligned}
 v\_\lambda^\pi(s) &:= \mathbb{E}\_s^\pi \left[ \sum\_{t=1}^\infty \lambda^{t-1}r(s\_t, a\_t)\right]\\; ,\\\
-q_\lambda^\pi(s, a) &:= r(s, a) + \mathbb{E}\_{s'\sim \mathcal{P}\_s^a}\left[v_\lambda^\pi(s')\right] \\; .
+q_\lambda^\pi(s, a) &:= r(s, a) + \lambda \mathbb{E}\_{s'\sim \mathcal{P}\_s^a}\left[v_\lambda^\pi(s')\right] \\; .
 \end{aligned}
 $$
 
@@ -69,7 +69,7 @@ favorite stochastic gradient based optimiser to generate better policies -- acco
 ### Likelihood Ratio
 The likelihood ratio is a neat little trick that allows us to do just that. In short, it asserts that:
 $$
-\nabla\_\theta U(\theta) = \mathbb{E}\_{\tau\sim \mathcal{T}\_\theta}\left[R\_\tau \nabla\_\theta \mathcal{T}\_\theta(\tau)\right] \\; .
+\nabla\_\theta U(\theta) = \mathbb{E}\_{\tau\sim \mathcal{T}\_\theta}\left[R\_\tau \nabla\_\theta \log \mathcal{T}\_\theta(\tau)\right] \\; .
 $$
 
 {{% toggle_block background-color="#FAD7A0" title="Proof" default-display="none"%}}
@@ -79,7 +79,7 @@ $$
 \nabla\_\theta U(\theta) &= \nabla\_\theta \sum_{\tau} R(\tau) \mathcal{T}\_\theta(\tau)\\; ,\\\
 &= \sum_{\tau} R(\tau)\nabla\_\theta \mathcal{T}\_\theta(\tau)\\; ,\\\
 &= \sum_{\tau} R(\tau)\mathcal{T}\_\theta(\tau)\nabla\_\theta \log\mathcal{T}\_\theta(\tau)\\; ,\\\
-&= \mathbb{E}\_{\tau\sim \mathcal{T}\_\theta}\left[R\_\tau \nabla\_\theta \mathcal{T}\_\theta(\tau)\right] \\; .
+&= \mathbb{E}\_{\tau\sim \mathcal{T}\_\theta}\left[R\_\tau \nabla\_\theta \log \mathcal{T}\_\theta(\tau)\right] \\; .
 \end{aligned}
 $$
 {{% /toggle_block %}}
