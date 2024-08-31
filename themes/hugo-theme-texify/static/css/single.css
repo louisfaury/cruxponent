@@ -1,6 +1,46 @@
-#main > h1 {
-    text-align: center;
+/* Style H1 elements with a larger horizontal line below them */
+.post h1 {
+    position: relative;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    font-size: 2em; /* Adjust font size if needed */
 }
+
+/* Add a larger horizontal line after H1 */
+.post h1::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 3px;  /* Larger line for H1 */
+    background-color: #ddd;  /* Color of the horizontal line */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin-top: 10px;
+}
+
+/* Style H2 elements with a smaller horizontal line below them */
+.post h2 {
+    position: relative;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    font-size: 1.5em; /* Adjust font size if needed */
+}
+
+/* Add a smaller horizontal line after H2 */
+.post h2::after {
+    content: "";
+    display: block;
+    width: 100%;  /* Smaller width for H2 line */
+    height: 0.5px;  /* Thinner line for H2 */
+    background-color: #ccc;  /* Slightly lighter color for H2 line */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin-top: 8px;
+}
+
 
 #main > .content {
     padding-top: 1rem;
@@ -38,3 +78,84 @@
 #main :target {
     background-color: azure;
 }
+
+/* Wrapper for the content and ToC */
+.content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 0 auto;
+    max-width: 1200px;  /* Or any width suitable for your layout */
+    padding-left: 220px; /* Enough space for the ToC */
+}
+
+/* Table of Contents Sidebar */
+.toc-sidebar {
+    position: fixed;
+    top: 50%;
+    left: 20px;
+    width: 200px;
+    transform: translateY(-50%);
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    border-right: 1px solid #ddd;  /* Slim vertical bar on the right */
+}
+
+/* General styling for the ToC links */
+.toc-sidebar nav a {
+    text-decoration: none;
+    display: block;
+    padding: 5px 0;
+    color: #333;
+    font-size: 14px; /* Smaller font size for all links */
+    font-weight: normal; /* Default weight for all items */
+}
+
+/* First-level (H1) headers bold */
+.toc-sidebar nav ul > li > a {
+    font-weight: bold;
+}
+
+/* All second-level and deeper headers (H2, H3, etc.) normal */
+.toc-sidebar nav ul > li > ul > li > a {
+    font-weight: normal;
+}
+
+/* Indenting lower-level sections */
+.toc-sidebar nav ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.toc-sidebar nav ul li {
+    padding-left: 10px;
+}
+
+.toc-sidebar nav ul li ul {
+    padding-left: 15px;
+}
+
+.toc-sidebar nav ul li ul li ul {
+    padding-left: 20px;
+}
+
+/* Highlight links on hover */
+.toc-sidebar nav a:hover {
+    color: #007acc;
+}
+
+/* Main content stays centered */
+.post {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    padding-left: 30px;  /* Padding to separate the content from the vertical bar */
+}
+
+
