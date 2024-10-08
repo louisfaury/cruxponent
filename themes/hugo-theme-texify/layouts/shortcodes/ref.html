@@ -1,0 +1,5 @@
+<span style="color: {{ .Get "color" | default "orange" }}; font-size: {{ .Get "font-size" | default "small" }};">
+  <a href="#{{ .Get "link" }}" style="color: inherit; text-decoration: none;">
+    {{ .Inner }}
+  </a>
+</span>
