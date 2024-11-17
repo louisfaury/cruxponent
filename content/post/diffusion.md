@@ -1,7 +1,7 @@
 +++
 author = "Louis Faury"
 title = "Diffusion Models from the Ground Up"
-date = "2024-10-30"
+date = "2024-11-15"
 +++
 
 We all have heard about diffusion models and played with their generative magic.
