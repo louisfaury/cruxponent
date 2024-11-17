@@ -112,7 +112,7 @@ Proving convergence of the Soft qVI algorithm to the soft-optimal q-function fol
 It starts by claim (and proving) that $q\_{\lambda, \alpha}^\star$ is a fixed-point of $\mathcal{T}\_{\lambda, \alpha}^\star$.
 
 {{< boxed title="Soft-Bellman fixed-point" >}}
-$\qquad \qquad \qquad \qquad\qquad \quad\;\text{For all } (s, a)\in\mathcal{S}\times\mathcal{A}$:
+$\qquad \qquad \qquad \qquad\qquad \quad\;\,\text{For all } (s, a)\in\mathcal{S}\times\mathcal{A}$:
 $$
 \mathcal{T}_{\lambda, \alpha}^\star(q_{\lambda, \alpha}^\star)(s, a) = q_{\lambda, \alpha}^\star(s, a)\; .
 $$
