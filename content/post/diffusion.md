@@ -25,7 +25,7 @@ often use the normal distribution as an elementary building block to a diffusion
 We will follow that path here, and first go through some well-known identities related to Gaussian density multiplication and convolution.
 You surely have seen those results countless times before; 
 we provide the proofs (which are undergraduate course all-time classics) for the sake of completeness.
-For the rest of this section, let $p\(x) = \mathcal{N}(x\vert \mu\_1, \sigma\_1)$ and $q(x) = \mathcal{N}(x\vert \mu\_2, \sigma\_2^2)$
+For the rest of this section, let $p\(x) = \mathcal{N}(x\vert \mu\_1, \sigma\_1^2)$ and $q(x) = \mathcal{N}(x\vert \mu\_2, \sigma\_2^2)$
 two univariate normal densities.
 
 
