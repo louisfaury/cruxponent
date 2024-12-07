@@ -157,3 +157,15 @@
     padding: 20px;
     padding-left: 30px;  /* Padding to separate the content from the vertical bar */
 }
+
+/* Hide the ToC sidebar on smaller screens */
+@media (max-width: 768px) {
+    .toc-sidebar {
+        display: none;
+    }
+
+    /* Adjust the content wrapper to take the full width */
+    .content-wrapper {
+        padding-left: 0; /* Remove the left padding used for the ToC */
+    }
+}
