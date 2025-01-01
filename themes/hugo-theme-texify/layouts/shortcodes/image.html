@@ -1,11 +1,16 @@
-<!-- Create a new file in your Hugo project's "layouts/shortcodes" directory with the name "image.html" -->
-
-<!-- layouts/shortcodes/image.html -->
 {{- $src := .Get "src" -}}
 {{- $width := .Get "width" -}}
 {{- $align := .Get "align" -}}
+{{- $caption := .Get "caption" | default "" -}}
 
-<img src="{{ $src }}" style="width: {{ $width }};" class="align{{ $align }}" alt="">
+<figure style="text-align: {{ $align }};">
+  <img src="{{ $src }}" style="width: {{ $width }};" class="align{{ $align }}" alt="">
+  {{- if $caption -}}
+    <figcaption style="margin-top: 0.5rem; font-style: italic; text-align: center;">
+      {{ $caption }}
+    </figcaption>
+  {{- end -}}
+</figure>
 
 <style>
 .alignleft {
