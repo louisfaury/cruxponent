@@ -1,6 +1,6 @@
 +++
 author = "Louis Faury"
-title = "Oldie but goodies: Optimal State Estimation"
+title = "Oldies but goodies: Optimal State Estimation"
 date = "2024-12-26"
 +++
 
