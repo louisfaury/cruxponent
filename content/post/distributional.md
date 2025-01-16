@@ -82,7 +82,7 @@ f\_\sharp : \Delta(\mathbb{R}) &\mapsto \Delta(\mathbb{R}) \\;,\\\
 \mu &\mapsto f\_\sharp\mu
 \end{aligned}
 $$
-where $f\_\sharp\mu(\mathcal{R}) = \mu(f^{-1}(\mathcal{R}))$ for any $\mathcal{R}\in\mathbb{R}$.
+where $f\_\sharp\mu(\mathcal{R}) = \mu(f^{-1}(\mathcal{R}))$ for any $\mathcal{R}\subseteq\mathbb{R}$.
 
 
 ### Wasserstein distance
@@ -104,7 +104,7 @@ $$
 Our road to devising algorithms that can compute $\mu\_\lambda^\pi$ is going to ressemble
 the "classical" one, that we follow to compute the optimal value function for an MDP -- the
 tools will be quite different, though.
-Up to some hurdles we will have to jump through along the way, the protocol will be to 
+Up to some hoops we will have to jump through along the way, the protocol will be to:
 1. show that 
 $\mu\_\lambda^\pi$ is the fixed-point to some contractive operator,
 2. compute it via some fixed-point iterations.
