@@ -7,7 +7,7 @@ date = "2024-12-26"
 This post is interested in state estimation in HMMs: filtering, prediction and smoothing.
 We will introduce state estimation as the solution of an optimisation problem,
 and prove the celebrated recursive updates for each inference use-case.
-A special attention will be given to filters (and how they easily generalise to the celebrated Kalman filters).
+A special attention will be given to HMM filters (and how they easily generalise to the celebrated Kalman filters).
 
 <!--more-->
 
@@ -25,7 +25,7 @@ We study Hidden Markov Models (HMMs): partially observable processes formalised 
 $(\mathcal{X}, \mathcal{Y}, p, q)$. 
 $\mathcal{X}$ is the state-space and 
 $\mathcal{Y}$ the observation space.
-The distribution $p$ materialises the stochastic evolution of the state $x\_t\in\mathcal{X}$,
+The distribution $p$ materialises the stochastic process for the state $x\_t\in\mathcal{X}$,
 which be observed via observations $y\_t\in\mathcal{Y}$.
 $$
 \left\\{\begin{aligned}
@@ -60,7 +60,7 @@ $$
 
 {{< infoblock>}}
 $\quad$ We study HMMs here for the sake of simplicity.
-Treating processes living in continuous space will just require swapping sums with integrals.
+Treating processes living in continuous spaces simply requires swapping sums with integrals.
 {{< /infoblock >}}
 
 ## Optimality
@@ -117,13 +117,13 @@ Further, it is quite clear that to compute this estimator,
 one should first compute the conditional $p(\cdot\vert y\_{1:t})$.
 
 
-### Bregman-divergences
+#### Bregman-divergences
 The $\ell_2$-norm is sometimes a clumsy way to measure distance between states.
 For instance, one usually prefers distributional distances, e.g. the Kullback-Leibler 
 divergence if the state lives in a simplex.
 The good news is that the estimator from (2) is also the solution of the following program,
 where the discrepancy to $x\_t$ is measured by _any_ Bregman divergence!
-Formally, for any differentiable and convex function $f:\mathbb{R}\mapsto\mathbb{R}$, denote $D\_f : \mathcal{X}\times\mathcal{X}\mapsto\mathbb{R}$
+Formally, for any differentiable and convex function $f:\mathcal{X}\mapsto\mathbb{R}$, denote $D\_f : \mathcal{X}\times\mathcal{X}\mapsto\mathbb{R}$
 the associated Bregman divergence:
 $$
 D\_f(x\\, \| \\, x^\prime) := f(x) - f(x^\prime) - f^\prime(x^\prime)(x-x^\prime)\\;.
@@ -196,7 +196,7 @@ $$
 
 (3) can be written in vectorial form:
 $$
-\boldsymbol{\pi}\_t \propto \text{diag}(\mathbf{Q}\_{y\_t})\mathbf{P}^\top\boldsymbol{\pi}\_{t-1}\\; .
+\boldsymbol{\pi}\_t \propto \text{diag}(\mathbf{Q}\_{y\_t})\mathbf{P}^\top\boldsymbol{\pi}\_{t-1}\\; ,
 $$
 where $\mathbf{Q}\_{y\_t}$ is the $y\_t$ line of $\mathbf{Q}$. Concretely, 
 this means that one can compute $\pi\_t$ recursively, 
@@ -212,16 +212,16 @@ $$
 \pi\_t(x) \propto p(y\_t\vert x) \pi\_{t\vert t-1}(x)\\; .
 $$
 
-### Beyond HMMs
+#### Beyond HMMs
 The ideas presented above are easily generalised to _continuous_ states and observations spaces.
 Representing the different probability measures by their densities, one can write:
 $$
 \pi\_t(x) \propto p(y\_t\vert x\_t) \int\_{\mathbb{R}} p(x\vert x^\prime)\pi\_{t-1}(x^\prime) dx^\prime\\; .
 $$
-The usual difficulty is this update step does not necessarily admit a closed form -- and the resulting
+The usual difficulty arises when this update step does not admit a closed form (which is basically almost always), and the resulting
 $\pi\_t$ does not have to belong to a parametric distribution (e.g. Gaussian).
 The well-known exception to this rule arise when $\pi\_{t-1}$ is a normal distribution, and both the 
-transition and emission kernels are also normal. Then, (4) admits an explicit form and $\pi\_t$ is also Gaussian.
+transition and emission kernels are also normal. Then (4) admits an explicit form and $\pi\_t$ is also Gaussian.
 This is the setting of the celebrated Kalman filter—which is often presented via the prediction and measurement 
 framework we discussed above.
 
