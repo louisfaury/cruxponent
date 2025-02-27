@@ -1,7 +1,7 @@
 +++
 author = "Louis Faury"
 title = "Oldies but goodies: Optimal State Estimation"
-date = "2024-12-26"
+date = "2025-01-16"
 +++
 
 This post is interested in state estimation in HMMs: filtering, prediction and smoothing.
