@@ -380,8 +380,16 @@ m\_\lambda^\pi(ds^\prime) := \tilde m\_\lambda^\pi(s^\prime\vert s)\rho(ds^\prim
 $$
 We can learn $\tilde m\_\lambda^\pi(s^\prime\vert s)$ directly, which is interpreted as a 
 similarity metric between states. It will be assumed, though, that one can 
-sample from $\rho$ -- for instance, if $\rho$ is the steady-state distribution induced by $\pi$.
-
+sample from $\rho$ -- for instance, if $\rho$ is the steady-state distribution induced by $\pi$. 
+The forward-backward factorisation will now write
+$
+m\_\lambda^\pi(s^\prime\vert s) = f\_\lambda^\pi(s)^\top b\_\lambda^\pi(s^\prime)
+$
+where $f\_\lambda^\pi$ and $b\_\lambda^\pi$ map $\mathcal{S}$ to $\mathbb{R}^d$.
+Most results detailed for the finite case can be generalised, under this set-up,
+to continuous condition. Learning rules for $m\_\lambda^\pi$, $f\_\lambda^\pi$ and
+$b\_\lambda^\pi$ can be retrieved by following a similar logic.
+ 
 ## References
 I got introduced to successor features reading:
 <div id="features"></div>
