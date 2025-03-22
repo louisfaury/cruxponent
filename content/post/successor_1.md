@@ -164,7 +164,7 @@ $$
 In state-indexed notations, this would write that for any $s\in\mathcal{S}$:
 $$
 \tag{4}
-m\_\lambda^\pi(s^\prime\vert s) = 1[s=s^\prime] + \lambda \sum\_{s^{\prime\prime}\in\mathcal{S}}m(s^{\prime\prime}, s^\prime)p(s^{\prime\prime}\vert s)\\; .
+m\_\lambda^\pi(s^\prime\vert s) = 1[s=s^\prime] + \lambda \sum\_{s^{\prime\prime}\in\mathcal{S}}m(s^\prime\vert s^{\prime\prime})p(s^{\prime\prime}\vert s)\\; .
 $$
 
 
