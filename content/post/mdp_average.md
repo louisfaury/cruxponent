@@ -1,7 +1,7 @@
 +++
 author = "Louis Faury"
 title = "Average Reward Control (1/2)"
-date = "2025-02-24"
+date = "2025-04-09"
 +++
 
 Thanks to its relative simplicity and conciseness,
