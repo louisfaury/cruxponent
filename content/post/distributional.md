@@ -155,10 +155,10 @@ last line. As a result, we have $\mu\_\lambda^\pi(s)([-\infty, r[) = \sum\_{a\in
 
 
 We will sometimes write (4) as $\mu\_\lambda^\pi(s) = \mathbb{E}^\pi\_s\left[(T\_\lambda^{s, a})\_\sharp
-\mu_\lambda^\pi(s^\prime)\right]$, or equivalently use the distributional 
-operator $\mathcal{T}\_\text{d}\Delta:(\mathbb{R})^\mathcal{S} \mapsto \Delta(\mathbb{R})^\mathcal{S}$
+\mu_\lambda^\pi(s^\prime)\right]$, or equivalently use the distributional Bellman 
+operator $\mathcal{T}\_\text{d}:\Delta(\mathbb{R})^\mathcal{S} \mapsto \Delta(\mathbb{R})^\mathcal{S}$
 where $\mathcal{T}\_\text{d}^\pi(\mu)(s)=\sum_{a\in\mathcal{A}}\sum\_{s^\prime\in\mathcal{S}} \pi(a\vert s)p(s^\prime\vert s, a)(T\_\lambda^{s, a})_\sharp
-\mu\_\lambda(s^\prime)$ for any $s\in\mathcal{S}$, so that:
+\mu\_\lambda(s^\prime)$ for $s\in\mathcal{S}$, so that:
 $$
 \tag{5}
 \mu\_\lambda^\pi = \mathcal{T}\_\text{d}^\pi(\mu\_\lambda^\pi)\\; .
