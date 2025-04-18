@@ -249,10 +249,8 @@ and by (3), a similar result holds for the average reward; that is, $\mathbf{P}\
 Observe that for any $T\in\mathbb{N}$:
 $$
 \begin{aligned}
-    \mathbf{P}\_\pi\cdot \frac{1}{T}\sum\_\{t\leq T}\mathbf{P}\_\pi^t &= \mathbf{P}\_\pi\cdot \frac{1}{T}\sum\_\{t\leq T}\mathbf{P}\_\pi^t \\;, \\\
-        &=\frac{1}{T}\sum\_\{t\leq T}\mathbf{P}\_\pi^{t+1} \\;, \\\
-        &= \frac{1}{T}\sum\_\{t\leq T}\mathbf{P}\_\pi^{t+1} \\;,\\\
-        &= \frac{1}{T}\Big(\sum\_\{t\leq T} \mathbf{P}\_\pi^{t} - \mathbf{I} + \mathbf{P}\_\pi^{t+1}\Big)\\;.
+    \mathbf{P}\_\pi\cdot \frac{1}{T}\sum\_\{t\leq T}\mathbf{P}\_\pi^t &=\frac{1}{T}\sum\_\{t\leq T}\mathbf{P}\_\pi^{t+1} \\;, \\\
+        &= \frac{1}{T}\Big(\sum\_\{t\leq T} \mathbf{P}\_\pi^{t} - \mathbf{I} + \mathbf{P}\_\pi^{T+1}\Big)\\;.
 \end{aligned}
 $$
 Because $\mathbf{P}\_\pi^{t+1}$ is bounded, letting $T\to\infty$ proves the result.
