@@ -1,6 +1,6 @@
 +++
 author = "Louis Faury"
-title = "Successor States and Representations (1/2)"
+title = "Successor States and Representations (1/3)"
 date = "2025-02-24"
 +++
 
