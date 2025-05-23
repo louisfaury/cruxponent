@@ -8,7 +8,7 @@ In this second post of this series, we take a break from successor measures to f
 We will first review the use of a generalised policy improvement mechanism 
 that can efficiently leverage the successor features of existing policies to 
 enable zero-shot transfer to new tasks.
-We will discuss some generalisation to universal successor features approximations, 
+We will then discuss the generalisation to universal successor features approximations, 
 allowing direct zero-shot control.
 
 <!--more-->
@@ -37,9 +37,7 @@ As usual, we will work with finite MDPs for simplicity.
 We will denote $\mathcal{M} = (\mathcal{S}, \mathcal{A}, p)$ some
 reward-free MDP, with $\mathrm{S}=\vert\mathcal{S}\vert$ and $\mathrm{A}=\vert\mathcal{A}\vert$.
 It can be further specified by any reward function
-$r\in\mathbb{R}^{\mathrm{S}\times\mathrm{A}}$. We will follow the usual
-notations on this blog, and interchangeably go from index to
-vectorial (in bold) notations.
+$r\in\mathbb{R}^{\mathrm{S}\times\mathrm{A}}$.
 
 ## Successor Features
 
@@ -48,7 +46,7 @@ vectorial (in bold) notations.
 $\quad$ Many results in this section are consequences of more general properties
 inherited from successor measures.
 For the sake of completeness, we will
-re-derive them from first principles.
+derive them from first principles.
 {{< /infoblock >}}
 
 ### Policy evaluation
@@ -61,7 +59,7 @@ $$
 \psi\_\lambda^\pi(s, a) := \mathbb{E}\_{s, a}^\pi\Big[\sum\_{t\geq 1} \lambda^{t-1}\phi(s\_t, a\_t)\Big]\\;,
 $$
 for any state-action pair $(s, a)\in\mathcal{S}\times\mathcal{A}$.
-Observe that successor features are only concerned by the dynamics of $\mathcal{M}$.
+Observe that successor features are only concerned by the dynamics $p$ of $\mathcal{M}$.
 They become useful when considering rewards that are _linear_ in $\phi$.
 Concretely, we will now consider reward signals $r\in\mathbb{R}^{\mathrm{S}\times\mathrm{A}}$ where
 for any $(s, a)\in \mathcal{S}\times\mathcal{A}$:
@@ -147,7 +145,7 @@ is the unique fixed-point of $\mathcal{T}\_\lambda^{\pi, \phi}$.
 
 In short, the implications are that successor features can be learned via classical
 dynamic programming mechanisms. When coupled with stochastic approximation (sampling) and 
-function approximations (say, neural networks)
+function approximations (say, neural networks),
 all the usual tricks (Bellman error minimisation, replay buffer, target networks, etc.) are valid.
 In deep reinforcement learning terms, it is safe to think of learning successor features to be roughly
 similar as implementing one of the many variants of DQN (except here for policy evaluation, not control).
@@ -164,7 +162,7 @@ q\_\lambda^{\pi\_i}(s, a) = \theta^\top \psi\_\lambda^{\pi\_i}(s, a).
 $$
 A naive (but effective) way to use this for our advantage is to perform this evaluation
 at the starting state and greedily follow to the highest valued policy.
-The authors of {{< ref link="features">}} [1]{{< /ref>}} propose to do better, 
+The authors of {{< ref link="features">}} [1]{{< /ref>}} show us we can do better
 by extending policy improvement to several base policies; concretely, to form $\pi$ such that for all $s\in\mathcal{S}$:
 $$
 \tag{6}
@@ -172,7 +170,7 @@ $$
 $$
 This guarantees that $\pi$ dominates any of the $\pi\_i$ on $\mathcal{M}\_\theta$.
 If the base policies $\\{\pi\_i\\}\_i$ can be indeed "stitched" together to yield 
-a performant policy on $\mathcal{M}\_\theta$, transfer will be succesful.
+a performant policy on $\mathcal{M}\_\theta$, transfer will be successful.
 
 
 {{< boxed title="Transfer" >}}
@@ -220,11 +218,11 @@ The previous section leverages successor features' fast policy evaluation, which
 indirectly unlocks fast (multi-) policy improvement and, as a result, transfer.
 In this section, we follow {{< ref link="universal">}} [2]{{< /ref>}} and rather
 focus on how we can directly train some zero-shot capabilities.
-We'd be more excited to directly learn to predict:
+We are more interested in directly learning to predict:
 $$
 \psi\_\lambda^{\pi^\star}(s, a) = \mathbb{E}\_{s, a}^{\pi^\star}\left[ \sum\_{t\geq 1}\lambda^{t-1}\phi(s\_t, a\_t)\right]\\;,
 $$
-the successor feature of the optimal policy $\pi^\star$, and _without_ any interaction with $\mathcal{M}\_\theta$, of course.
+the successor feature of the optimal policy $\pi^\star$--_without_ any interaction with $\mathcal{M}\_\theta$, of course.
 Doing so will require learning on a variety of _tasks_ (several values of $\theta$),
 so we can hope to generalise zero-shot to new ones.
 Below, we denote $\pi\_\theta^\star$ the optimal value for the MDP $\mathcal{M}\_\theta$.
@@ -251,15 +249,15 @@ $.
 At this point, the proximity to universal value function approximators {{< ref link="uvfa">}} [2]{{< /ref>}} is quite striking.
 As will soon become quite clear (hopefully), an advantage of universal SF approximators comes from the
 decoupling of reward and dynamics, as it allows learning for many values of $\theta$ from a single trajectory, 
-without synthetizing different rewards.
+without synthesizing different rewards.
 {{% /toggle_block %}}
 
-We provide below some pseudo-code to illustrate the learning of the universal successor features. 
+We provide below some pseudocode to illustrate the learning of the universal successor features. 
 Using standard "tricks" (replay buffer, target networks, etc.) is recommended, but skipped here for clarity.
 The point is to illustrate the main features that arise when training $\psi$.
 This naive algorithm iterates through tasks by sampling $\theta\in\mathbb{R}^d$. 
 Because we decoupled dynamics from rewards, one can train $\psi$ for several values of 
-$\theta$ _even_ when following a single task!
+$\theta$ _even_ when executing on a single task.
 We actually use the sampled task only to guide our exploration policy, as we will pick up
 action in an (almost) greedy fashion w.r.t $\theta^\top\psi(s, a, \theta)$--a.k.a the
 (approximated) q-values of the optimal policy for the MDP parametrised by $\theta$.
@@ -297,8 +295,8 @@ $\textbf{return } \psi$
 
 So far, we have assumed that the feature map $\phi$ and the reward vector $\theta$ is known.
 The former assumption is checked when state featurisation is "easy"; _e.g._ by building event detectors
-for picking up a relevant object, moving into a speficif direction, etc. Once we have a 
-feature map, estimating $\theta$ for a given reward signal can anively be achieved by regression on some buffered data.
+for picking up a relevant object, moving into a specific direction, etc. Once we have a 
+feature map, estimating $\theta$ for a given reward signal can naively be achieved by regression on some buffered data.
 
 However, in general, designing $\phi$ from scratch is arguably hard.
 It is desirable to extract it directly from data, _e.g._ some trajectories collected arbitrarily,
