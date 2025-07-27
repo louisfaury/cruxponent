@@ -7,7 +7,7 @@ date = "2025-06-20"
 The goal of this post is to explore from first principles the learning of belief models in partially observable MDPs. 
 We will start with a quick refresher on variational inference 
 and then apply it to state estimation in POMDPs. 
-Specifically, we will re-derive the update rule used to train Dreamer-like world models.
+Specifically, we will derive the update rule used to train Dreamer-like world models.
 <!--more-->
 
 
