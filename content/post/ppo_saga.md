@@ -117,7 +117,7 @@ the value difference between two stationary policies $\pi, \\, \pi^\prime$:
 $$
 \tag{4}
 \begin{aligned}
-    v\_{\color{black}\pi^\prime} - v\_{\color{black}\pi} &= \mathbb{E}^{\color{black}\pi^\prime}\_\nu\Big[\sum\_{t=1}\lambda^{t-1} \text{a}\_{\color{black}\pi}(s\_t, a\_t)\Big]\\;,\\\
+    v\_{\color{black}\pi^\prime} - v\_{\color{black}\pi} &= \mathbb{E}^{\color{black}\pi^\prime}\_\nu\Big[\sum\_{t \geq 1}\lambda^{t-1} \text{a}\_{\color{black}\pi}(s\_t, a\_t)\Big]\\;,\\\
                     &= \sum\_{s}d\_{\color{black}\pi^\prime}(s) \sum\_{a} {\color{black}\pi^\prime}(a\vert s) \\,\text{a}\_{\color{black}\pi}(s, a)\\;.
 \end{aligned}
 $$
@@ -142,10 +142,10 @@ $$
 Therefore:
 $$ 
 \begin{aligned}
-\mathbb{E}^{\pi^\prime}\_\nu\Big[\sum\_{t=1}\lambda^{t-1} \text{a}\_\pi(s\_t, a\_t)\Big]  &= \mathbb{E}^{\pi^\prime}\_\nu\Big[\sum\_{t=1}\lambda^{t-1} r(s\_t, a\_t)\Big] + 
-\mathbb{E}^{\pi^\prime}\_\nu\Big[\sum\_{t=1}\lambda^{t-1} \big(\mathbb{E}^{\pi^\prime}\_\nu\big[\lambda v\_{\pi}(s\_{t+1})\vert s\_t, a\_t)\big]-v\_\pi(s\_t)\big)\Big]\\;, \\\
-&= v\_{\pi^\prime} + \mathbb{E}^{\pi^\prime}\_\nu\Big[\sum\_{t=1}\lambda^{t-1} \mathbb{E}^{\pi^\prime}\_\nu\big[\lambda v\_{\pi}(s\_{t+1}\vert s\_t, a\_t)\big]-\lambda^{t-1}v\_\pi(s\_t)\Big]\\;, &(\text{def.})\\\
-&= v\_{\pi^\prime} + \mathbb{E}^{\pi^\prime}\_\nu\Big[\sum\_{t=1}\lambda^{t} v\_{\pi}(s\_{t+1})-\lambda^{t-1}v\_\pi(s\_t)\Big]\\;, &(\text{tower rule})\\\
+\mathbb{E}^{\pi^\prime}\_\nu\Big[\sum\_{t \geq 1}\lambda^{t-1} \text{a}\_\pi(s\_t, a\_t)\Big]  &= \mathbb{E}^{\pi^\prime}\_\nu\Big[\sum\_{t \geq 1}\lambda^{t-1} r(s\_t, a\_t)\Big] + 
+\mathbb{E}^{\pi^\prime}\_\nu\Big[\sum\_{t \geq 1}\lambda^{t-1} \big(\mathbb{E}^{\pi^\prime}\_\nu\big[\lambda v\_{\pi}(s\_{t+1})\vert s\_t, a\_t)\big]-v\_\pi(s\_t)\big)\Big]\\;, \\\
+&= v\_{\pi^\prime} + \mathbb{E}^{\pi^\prime}\_\nu\Big[\sum\_{t \geq 1}\lambda^{t-1} \mathbb{E}^{\pi^\prime}\_\nu\big[\lambda v\_{\pi}(s\_{t+1}\vert s\_t, a\_t)\big]-\lambda^{t-1}v\_\pi(s\_t)\Big]\\;, &(\text{def.})\\\
+&= v\_{\pi^\prime} + \mathbb{E}^{\pi^\prime}\_\nu\Big[\sum\_{t \geq 1}\lambda^{t} v\_{\pi}(s\_{t+1})-\lambda^{t-1}v\_\pi(s\_t)\Big]\\;, &(\text{tower rule})\\\
 &= v\_{\pi^\prime} - \lim\_{t\to\infty}\lambda^t \mathbb{E}^{\pi^\prime}\_\nu v\_\pi(s\_{t+1}) - v\_\pi\\;, &(\text{telescopic sum})\\\
 &= v\_{\pi^\prime} - v\_\pi\\;.  &(\lambda<1)
 \end{aligned}
