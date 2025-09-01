@@ -146,7 +146,7 @@ $$
 \mathbb{E}^{\pi^\prime}\_\nu\Big[\sum\_{t \geq 1}\lambda^{t-1} \big(\mathbb{E}^{\pi^\prime}\_\nu\big[\lambda v\_{\pi}(s\_{t+1})\vert s\_t, a\_t)\big]-v\_\pi(s\_t)\big)\Big]\\;, \\\
 &= v\_{\pi^\prime} + \mathbb{E}^{\pi^\prime}\_\nu\Big[\sum\_{t \geq 1}\lambda^{t-1} \mathbb{E}^{\pi^\prime}\_\nu\big[\lambda v\_{\pi}(s\_{t+1}\vert s\_t, a\_t)\big]-\lambda^{t-1}v\_\pi(s\_t)\Big]\\;, &(\text{def.})\\\
 &= v\_{\pi^\prime} + \mathbb{E}^{\pi^\prime}\_\nu\Big[\sum\_{t \geq 1}\lambda^{t} v\_{\pi}(s\_{t+1})-\lambda^{t-1}v\_\pi(s\_t)\Big]\\;, &(\text{tower rule})\\\
-&= v\_{\pi^\prime} - \lim\_{t\to\infty}\lambda^t \mathbb{E}^{\pi^\prime}\_\nu v\_\pi(s\_{t+1}) - v\_\pi\\;, &(\text{telescopic sum})\\\
+&= v\_{\pi^\prime} + \lim\_{t\to\infty}\lambda^t \mathbb{E}^{\pi^\prime}\_\nu v\_\pi(s\_{t+1}) - v\_\pi\\;, &(\text{telescopic sum})\\\
 &= v\_{\pi^\prime} - v\_\pi\\;.  &(\lambda<1)
 \end{aligned}
 $$
@@ -157,7 +157,7 @@ did for proving (2).
 {{% toggle_block background-color="#CBE4FE" title="Some intuition" default-display="none"%}}
 The above inequality can easily be rewritten as:
 $$
-\sum\_{a} \pi^\prime(a\vert s)q\_\pi(s, a) \geq \sum\_{a}\pi(s, a)q\_\pi(s, a)\\;.
+\sum\_{a} \pi^\prime(a\vert s)q\_\pi(s, a) \geq \sum\_{a}\pi(a\vert s)q\_\pi(s, a)\\;.
 $$
 
 In other words, when sampling from $\pi^\prime$, 
