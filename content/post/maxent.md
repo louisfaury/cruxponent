@@ -127,7 +127,7 @@ $$
 $$
 with $ z\_{\lambda, \alpha}^\pi(s) = \alpha \log \sum_{a\in\mathcal{A}} \exp(q\_{\lambda, \alpha}^\pi(s, a)/\alpha)$ only
 plays the part of a normalising constant. 
-You can indeed also write (1) through the more concise
+You can indeed also write (4) through the more concise
 $
 \pi^\prime(\cdot\vert s) \propto \exp(q\_{\lambda, \alpha}^\pi(s, \cdot) / \alpha)\; .
 $
@@ -136,7 +136,7 @@ Indeed, for all $s, a \in\mathcal{S}\times\mathcal{A}$ we have:
 $$q\_{\lambda, \alpha}^{\pi^\prime}(s, a) \geq q\_{\lambda, \alpha}^\pi(s, a)\\;.$$
 
 {{% toggle_block background-color="#FAD7A0" title="Proof" default-display="none"%}}
-Let's prove that the operator (1) brings soft-improvement.
+Let's prove that the operator (4) brings soft-improvement.
 Observe that for any $\pi^{\prime\prime}$ and $s\in\mathcal{S}$ we have:
 $$
 \text{KL}(\pi^{\prime\prime}(\cdot\vert s) ||\pi^\prime(\cdot\vert s)) = -\mathcal{H}(\pi^{\prime\prime}(\cdot\vert s)) + \frac{1}{\alpha} \left(z\_{\lambda, \alpha}^\pi(s) - \sum\_{a\in\mathcal{A}} \pi^{\prime\prime}(a\vert s) q\_{\lambda, \alpha}^\pi(s, a)\right)\\; .
@@ -163,7 +163,7 @@ which concludes the proof.
 
 
 This tool is useful to prove the announced claim. Let $\pi\_\alpha^\star$ the soft-optimal policy. Since it cannot be soft-improved (by definition)
-it must be a fixed point to (1). Hence, for all $s, a\in\mathcal{S}\times\mathcal{A}$:
+it must be a fixed point to (4). Hence, for all $s, a\in\mathcal{S}\times\mathcal{A}$:
 $$
 \tag{6}
 \pi\_\alpha^\star(a\vert s) = \exp(q\_{\lambda, \alpha}^{\pi\_\alpha^\star}(s, a) /\alpha - z\_{\lambda, \alpha}^{\pi\_\alpha^\star}(s)/\alpha)\\;, 
@@ -251,7 +251,7 @@ it must converge to $q\_\lambda^\star$ -- or else it could be further improved. 
 
 ## RL algorithms
 Like qVI can be turned into the practical RL algorithm that is Q-learning, Soft qVI can go through similar stochastic and functional
-approximation hoops (see [here](post/rl_landscape_vb)) to move from the control to the RL realm. 
+approximation hoops to move from the control to the RL realm. 
 The most salient difficulty comes from the inner-sum over the action space $\sum\_a \exp q\_t(s, a)$ present in the
 soft Bellman operator $\mathcal{T}\_{\lambda, \alpha}^\star$. 
 To avoid the computational cost of computing this term when the action space gets large, {{< ref link="ql">}} [1]{{< /ref>}}
