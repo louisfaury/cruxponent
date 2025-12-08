@@ -143,7 +143,7 @@ to prove that it also is a contracting mapping.
 We will denote $v\_\Omega^\star$ its unique fixed-point, and call that object the
 optimal regularised value. 
 Thanks to (3), given some $v\in\mathbb{R}^\mathrm{S}$ (and its associated $q\in\mathbb{R}^{\mathrm{S}\times\mathrm{A}}$),
-the greedy regularised policy, _a.k.a_ the one which attains the maximum in (5), is provided by the
+the greedy regularised policy, _a.k.a._ the one which attains the maximum in (5), is provided by the
 convex conjugate's gradient. 
 Generalising from the non-regularised case, the optimal $\Omega$-regularised policy 
 is defined as the only $v\_\Omega^\star$-improving policy; concretely, 
@@ -233,7 +233,7 @@ The most famous examples are derived from entropic regularisation–that is,
 $\Omega(p) = \sum\_{a\in\mathcal{A}} p_a\log p\_a$
 and $\Omega^\star(p) = \log[\sum\_{a\in\mathcal{A}}\exp(p_a)]$ being the smoothed maximum.
 For instance, the soft q-learning of {{< ref link="sql">}} [2]{{< /ref>}}
-can be seen as a extension of the $\Omega$-regularised value iteration algorithm
+can be seen as an extension of the $\Omega$-regularised value iteration algorithm
 (extend to support stochastic approximation and function approximation).
 There, the main difficulty comes from the evaluation of $\Omega^\star$ for 
 continuous action spaces (it involves an integral over $\mathcal{A}$).
@@ -288,7 +288,7 @@ can considerably speed up the optimisation of $f$.
 
 {{< infoblock>}}
 $\quad$ This is called the proximal view of mirror descent. There is also a 
-fascinating mirror-map view which generalises gradient descent beyond Hillbert spaces
+fascinating mirror-map view which generalises gradient descent beyond Hilbert spaces
 (for which the representer theorem holds).
 {{< /infoblock >}}
 
