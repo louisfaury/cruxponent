@@ -1,0 +1,25 @@
+<style>
+  .algo-block {
+    position: relative;
+    background-color: #f0f0f0;
+    padding: 20px;
+    word-wrap: break-word;
+    font-style: normal;
+    margin-bottom: 1em;
+  }
+
+  .algo-block .algo-title {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    padding: 2px 8px;
+    background-color: #d4d4d4;
+    color: #000000;
+    font-weight: bold;
+  }
+</style>
+
+<div class="algo-block">
+  {{ .Inner }}
+  <div class="algo-title">{{ .Get "title" }}</div>
+</div>
