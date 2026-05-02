@@ -1,7 +1,7 @@
 +++
 author = "Louis Faury"
 title = "Post-Training is a Contextual Bandit"
-date = "2026-04-20"
+date = "2026-04-29"
 +++
 
 Coming from a control background, applying RL to text generation is hardly intuitive. 
