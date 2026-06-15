@@ -3,13 +3,15 @@ disqusShortname = ""                      # disqus shortcode
 enableGitInfo = false                     # retrieve last modified date from git commits
 enableRobotsTXT = true                    # /robots.txt
 googleAnalytics = "G-4N03ZESV22"          # google analytics id
-languageCode = "en"                       # content language
-paginate = 100                              # number of post each page
+locale = "en"                             # content language
 rssLimit = 10                             # maximum items in rss feeds
 theme = "hugo-theme-texify"               # theme directory name
 title = "CruxPonent"                          # website title
 
-[author]
+[pagination]
+pagerSize = 100                           # number of posts each page
+
+[params.author]
 email = "l.faury@hotmail.fr" # your email
 name = "Louis Faury"          # your name
 
