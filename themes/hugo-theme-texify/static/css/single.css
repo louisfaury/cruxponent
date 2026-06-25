@@ -46,6 +46,20 @@
     padding-top: 1rem;
 }
 
+.post > .post-meta {
+    color: #666;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.01em;
+    margin-top: -10px;
+    margin-bottom: 1.25rem;
+}
+
+.post > .post-meta > .post-meta-sep {
+    margin: 0 0.4em;
+    opacity: 0.6;
+}
+
 #main > .warning {
     background-color: brown;
     color: white;

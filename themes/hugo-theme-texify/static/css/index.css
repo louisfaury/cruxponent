@@ -9,9 +9,20 @@
     justify-content: space-between;
 }
 
-#main > .post > h2 > time {
-    font-size: 1rem;
+#main > .post > h2 > .post-meta {
+    color: #666;
+    flex-shrink: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.7rem;
     font-weight: normal;
+    letter-spacing: 0.01em;
+    margin-left: 1rem;
+    white-space: nowrap;
+}
+
+#main > .post > h2 > .post-meta > .post-meta-sep {
+    margin: 0 0.4em;
+    opacity: 0.6;
 }
 
 #main > .post > .content {

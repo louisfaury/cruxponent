@@ -9,7 +9,11 @@
   <div class="post">
     <h2>
       <a href="{{ .Permalink }}">{{ .Title }}</a>
-      <time>{{ .PublishDate.Format .Site.Params.dateFormat }}</time>
+      <span class="post-meta">
+        <time>{{ .PublishDate.Format .Site.Params.dateFormat }}</time>
+        <span class="post-meta-sep" aria-hidden="true">·</span>
+        <span class="reading-time">{{ partial "reading-time.html" . }}</span>
+      </span>
     </h2>
     {{ if ne .Params.tags nil }}
     <div>

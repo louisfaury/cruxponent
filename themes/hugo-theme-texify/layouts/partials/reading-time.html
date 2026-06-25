@@ -1,0 +1,7 @@
+{{- /* Reading-time estimate based on raw markdown length (chars/minute).
+       Hugo's built-in .ReadingTime relies on .WordCount, which undercounts
+       LaTeX-heavy posts. Tune the divisor below to taste. */ -}}
+{{- $charsPerMinute := 1100 -}}
+{{- $minutes := div (len .RawContent) $charsPerMinute -}}
+{{- if lt $minutes 1 -}}{{- $minutes = 1 -}}{{- end -}}
+{{- $minutes -}} min read

@@ -16,6 +16,11 @@
   {{ end }}
   {{ end }}
   <h1>{{ .Title }}</h1>
+  <div class="post-meta">
+    <time>{{ .PublishDate.Format .Site.Params.dateFormat }}</time>
+    <span class="post-meta-sep" aria-hidden="true">·</span>
+    <span class="reading-time">{{ partial "reading-time.html" . }}</span>
+  </div>
   {{ if ne .Params.tags nil }}
   <div>
     <b>Keywords: </b>
