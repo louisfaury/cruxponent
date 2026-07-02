@@ -337,7 +337,7 @@ involve a product of ratios; it's reasonable to expect them to be ill-behaved fo
 given that each factor is a new potential blow-up. Clipping sure helps—yet we might end up doing it quite
 aggressively, which slows down learning. 
 In practice, given that $\pi\approx \pi_t$ (cf. the regularisation towards $\pi\_0$), we can obtain
-better-behaved object by approximating the product via a sum; with $\blacksquare$ a constant w.r.t $\pi$:
+better-behaved object by approximating the product via a sum; with $\blacksquare$ being 'small':
 $$
 \prod\_{m=1}^M \frac{\pi(a\_m\vert c, a\_{<m})}{\pi\_t(a\_m\vert c, a\_{<m})} \approx \sum\_{m=1}^M \frac{\pi(a\_m\vert c, a\_{<m})}{\pi\_t(a\_m\vert c, a\_{<m})} + \blacksquare\\;.
 $$
