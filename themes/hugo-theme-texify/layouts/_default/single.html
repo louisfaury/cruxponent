@@ -33,7 +33,7 @@
   {{ if ne .TableOfContents "<nav id=\"TableOfContents\"></nav>" }}
   <div class="toc-sidebar">
     <nav class='TableOfContents'>
-      {{ .TableOfContents | safeHTML }}
+      {{ .TableOfContents | replaceRE " HAHAHUGOSHORTCODE[A-Za-z0-9]+" "" | safeHTML }}
     </nav>
   </div>
   {{ end }}
