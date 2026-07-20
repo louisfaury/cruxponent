@@ -54,7 +54,7 @@ converges linearly fast to $q\_\lambda^\pi$—but applying this operator require
 and, for large state-action spaces, involves large matrix-vector products.
 
 In practice, one resorts to stochastic approximations (à la Robbins-Monroe) of fixed point algorithms.
-Concretely, given some experience $(s\_k, a\_k, s\_{k+1}, a\_{k+1})$ and triggered by $\pi$ and some 
+Concretely, given some experience $(s\_k, a\_k, s\_{k+1}, a\_{k+1})$ triggered by $\pi$ and some 
 estimator $q\in\mathbb{R}^{\mathrm{S}\times\mathrm{A}}$, denote
 $\delta\_k^\pi := r(s\_k, a\_k) + \lambda q(s\_{k+1}, a\_{k+1}) - q(s\_k, a\_k)$
 its associated temporal difference error (also known as the Bellman residual).
