@@ -236,7 +236,7 @@ $$
 $$
 At this point, we are now ready to use (4) so to introduce the reverse $q(x\_{t-1}\vert x\_t, x\_0)$.
 It would of course be simpler to introduce $q(x\_{t-1}\vert x\_t)$ instead, however we cannot have a closed form for the latter.
-Observe that by Bayes rule we have $q(x\_t\vert x\_{t-1}) = q(x\_t\vert x\_{t-1}, x\_0) = q(x\_{t-1}\vert x\_t, x\_0)q(x\_t\vert x\_0) / q(x\_{t-1}\vert x\_0)$.
+Observe that by Bayes rule we have $q(x\_t\vert x\_{t-1}) = q(x\_{t-1}\vert x\_t, x\_0)q(x\_t\vert x\_0) / q(x\_{t-1}\vert x\_0)$.
 Hence:
 $$
 \begin{aligned}
