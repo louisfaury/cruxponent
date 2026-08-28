@@ -115,7 +115,7 @@ $\psi\_\lambda^\pi$ is a fixed-point.
 {{< boxed title="Bellman equations" >}}
 $\qquad\qquad\qquad\qquad\quad
 \text{For any stationary policy }\pi,\text{ its successor features }
-\psi_\lambda^\pi \text{ are the only fixed point of }\mathcal{T}_\lambda^{\pi, \phi}.$
+\psi_\lambda^\pi \text{ are the only fixed point of }\mathcal{T}_\lambda^{\pi, \phi}:$
 $$
 \tag{5}
 \mathcal{T}_\lambda^{\pi, \phi}(\psi_\lambda^\pi)=\psi_\lambda^\pi\;.
@@ -225,7 +225,7 @@ $$
 the successor feature of the optimal policy $\pi^\star$--_without_ any interaction with $\mathcal{M}\_\theta$, of course.
 Doing so will require learning on a variety of _tasks_ (several values of $\theta$),
 so we can hope to generalise zero-shot to new ones.
-Below, we denote $\pi\_\theta^\star$ the optimal value for the MDP $\mathcal{M}\_\theta$.
+Below, we denote $\pi\_\theta^\star$ the optimal policy for the MDP $\mathcal{M}\_\theta$.
 Let the universal successor feature be:
 $$
 \begin{aligned}
