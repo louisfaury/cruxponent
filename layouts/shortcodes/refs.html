@@ -1,0 +1,9 @@
+{{- /* Grouped citation, e.g. {{< refs link="fmgm,fsf" label="1,2" >}} renders [1,2] with one anchor per label. */ -}}
+{{- $links := split (.Get "link") "," -}}
+{{- $labels := split (.Get "label") "," -}}
+<span style="color: {{ .Get "color" | default "orange" }}; font-size: {{ .Get "font-size" | default "small" }};">[
+  {{- range $i, $link := $links -}}
+    {{- if $i }},{{ end -}}
+    <a href="#{{ trim $link " " }}" style="color: inherit; text-decoration: none;">{{ trim (index $labels $i) " " }}</a>
+  {{- end -}}
+]</span>

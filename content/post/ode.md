@@ -57,7 +57,7 @@ Here, we will focus on the 'strong' version which requires _global_ Lipschitz co
 
 
 {{< boxed title="Cauchy-Lipschitz" >}}
-$\qquad\qquad\qquad\qquad\; \text{If } f \text{ is Lipschitz continuous then}$
+$\qquad\qquad\qquad\qquad\; \text{If } f \text{ is Lipschitz continuous then the}$
 $\text{Cauchy problem }(\star)\text{ has a unique solution.}$
 {{< /boxed >}}
 
