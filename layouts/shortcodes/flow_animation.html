@@ -1,0 +1,244 @@
+{{- /*
+  Interactive flow of the swirl ODE  dy/dt = -a y + b/(1+|y|^2) J y  (J: rotation by pi/2).
+  As t moves in [0, 1], four particles travel along their trajectories t -> psi(y_i, t).
+  Same closed-form flow and parameters as drafts/flow_figures/*.tex, but time is contracted:
+  t runs the flow up to T*t, i.e. we display the flow of the sped-up field T*f.
+*/ -}}
+{{- $id := printf "%s-%d" .Name .Ordinal -}}
+<figure class="flow-anim" id="{{ $id }}">
+  <svg viewBox="0 0 560 260" role="img" aria-label="Flow of a two-dimensional ODE, controlled by a time slider"></svg>
+  <div class="flow-anim-controls">
+    <button type="button" aria-label="Play">&#9654;</button>
+    <input type="range" min="0" max="1" step="0.002" value="0" aria-label="Time t">
+    <span class="flow-anim-t"><span class="flow-anim-mi">t</span> = <span class="flow-anim-tv">0.00</span></span>
+  </div>
+  {{- with .Get "caption" }}
+  <figcaption>{{ . }}</figcaption>
+  {{- end }}
+</figure>
+
+<style>
+  /* small figure, centred, wider than tall */
+  .flow-anim { margin: 1.2rem auto; max-width: 440px; text-align: center; }
+  .flow-anim svg { width: 100%; height: auto; display: block; user-select: none; }
+  .flow-anim-controls { display: flex; align-items: center; gap: 0.5rem; margin: 0.1rem 0 0; }
+  /* bare play glyph, no circle */
+  .flow-anim-controls button {
+    flex: none; width: 1.2rem; border: none; background: none; padding: 0; margin: 0;
+    color: #222; cursor: pointer; font-size: 0.75rem; line-height: 1;
+  }
+  .flow-anim-controls button:hover { color: #000; }
+  .flow-anim-controls button:focus-visible { outline: 1px dotted #555; outline-offset: 2px; }
+  /* slim slider: thin track, small round thumb */
+  .flow-anim-controls input[type=range] {
+    flex: 1; -webkit-appearance: none; appearance: none; background: transparent; height: 1rem; margin: 0; cursor: pointer;
+  }
+  .flow-anim-controls input[type=range]::-webkit-slider-runnable-track { height: 1px; background: #999; }
+  .flow-anim-controls input[type=range]::-moz-range-track { height: 1px; background: #999; }
+  .flow-anim-controls input[type=range]::-moz-range-progress { height: 1px; background: #222; }
+  .flow-anim-controls input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 9px; height: 9px; margin-top: -4px; border-radius: 50%; border: none; background: #222;
+  }
+  .flow-anim-controls input[type=range]::-moz-range-thumb { width: 9px; height: 9px; border-radius: 50%; border: none; background: #222; }
+  .flow-anim-controls input[type=range]:focus-visible { outline: 1px dotted #555; outline-offset: 3px; }
+  /* KaTeX fonts, declared by the KaTeX stylesheet the theme already loads */
+  .flow-anim-t { flex: none; width: 3.8rem; text-align: right; font-size: 0.9rem; font-family: KaTeX_Main, "Latin Modern Roman", serif; }
+  .flow-anim-mi { font-family: KaTeX_Math, "Latin Modern Roman", serif; font-style: italic; }
+  /* same as the theme's image shortcode */
+  .flow-anim figcaption { margin-top: 0.5rem; font-style: italic; text-align: center; }
+</style>
+
+<script>
+(function () {
+  const root = document.getElementById("{{ $id }}");
+  const svg = root.querySelector("svg");
+  const slider = root.querySelector("input");
+  const button = root.querySelector("button");
+  const tLabel = root.querySelector(".flow-anim-tv");
+  const NS = "http://www.w3.org/2000/svg";
+
+  // flow parameters, as in the TikZ figures; T contracts time
+  const A = 0.7, B = 3, T = 2.5;
+  function psi([x, y], t) {
+    t *= T;
+    const q = x * x + y * y;
+    const th = B * (t + 0.5 / A * Math.log((1 + q * Math.exp(-2 * A * t)) / (1 + q)));
+    const c = Math.cos(th), s = Math.sin(th), e = Math.exp(-A * t);
+    return [e * (c * x - s * y), e * (s * x + c * y)];
+  }
+
+  // plane coordinates [-3.73, 3.73] x [-1.73, 1.73] -> SVG pixels (75 px per unit)
+  const W = 560, H = 260, UNIT = 75;
+  const px = ([x, y]) => [W / 2 + UNIT * x, H / 2 - UNIT * y];
+  function el(tag, attrs, parent) {
+    const node = document.createElementNS(NS, tag);
+    for (const k in attrs) node.setAttribute(k, attrs[k]);
+    (parent || svg).appendChild(node);
+    return node;
+  }
+  const lin = (lo, hi, n) => Array.from({ length: n + 1 }, (_, i) => lo + (hi - lo) * i / n);
+  // TeX-like labels with KaTeX's fonts: math italic for symbols, upright roman for digits and punctuation
+  const mi = (s) => '<tspan font-family="KaTeX_Math, serif" font-style="italic">' + s + "</tspan>";
+  const sub = (base, s) => mi(base) + '<tspan baseline-shift="sub" font-size="0.7em">' + s + "</tspan>";
+
+  // spread in radius and angle, so that the four spirals have different sizes and phases
+  const PARTICLES = [
+    { y0: [-2.3, -1.4], color: "#2a78d6" },
+    { y0: [-1.3, 0.5],  color: "#eb6834" },
+    { y0: [2.7, -1.2],  color: "#1baf7a" },
+    { y0: [1.3, 1.3],   color: "#4a3aa7" },
+  ];
+
+  // axes, black with stealth-like arrow tips, as in the TikZ figures
+  const defs = el("defs", {});
+  const head = el("marker", { id: "{{ $id }}-head", viewBox: "0 0 10 10", refX: 9, refY: 5,
+    markerWidth: 8, markerHeight: 8, orient: "auto" }, defs);
+  el("path", { d: "M0,1L10,5L0,9L3,5Z", fill: "#000" }, head);
+  const axis = { stroke: "#000", "stroke-width": 1, "marker-end": "url(#{{ $id }}-head)" };
+  el("line", { x1: 8, y1: H / 2, x2: W - 8, y2: H / 2, ...axis });
+  el("line", { x1: W / 2, y1: H - 6, x2: W / 2, y2: 6, ...axis });
+
+  // the (autonomous) field f(y) = -A y + B / (1 + |y|^2) J y, as a quiver centred on a half-unit grid,
+  // arrow length growing mildly with the field's norm; same style as in fm_pitch_animation.html
+  const field = ([x, y]) => { const r = B / (1 + x * x + y * y); return [-A * x - r * y, -A * y + r * x]; };
+  const SLATE = "#9fb3b9";
+  const qhead = el("marker", { id: "{{ $id }}-qhead", viewBox: "0 0 10 10", refX: 8, refY: 5,
+    markerWidth: 4.5, markerHeight: 4.5, orient: "auto" }, defs);
+  el("path", { d: "M0,1L10,5L0,9L3,5Z", fill: SLATE }, qhead);
+  const quiver = el("g", { stroke: SLATE, "stroke-width": 1.3, "stroke-linecap": "round",
+    "marker-end": "url(#{{ $id }}-qhead)" });
+  const grid = [];
+  for (let x = -3.5; x <= 3.51; x += 0.5) for (let y = -1.5; y <= 1.51; y += 0.5) grid.push([x, y]);
+  const norms = grid.map((p) => Math.hypot(...field(p))), top = Math.max(...norms);
+  grid.forEach((p, i) => {
+    if (norms[i] < 1e-9) return;
+    const [x0, y0] = px(p), [u, v] = field(p), len = 10 + 10 * norms[i] / top;
+    const dx = len * u / norms[i] / 2, dy = -len * v / norms[i] / 2;
+    el("line", { x1: (x0 - dx).toFixed(1), y1: (y0 - dy).toFixed(1), x2: (x0 + dx).toFixed(1), y2: (y0 + dy).toFixed(1) }, quiver);
+  });
+  // the figure is at most 440px wide: 21 viewBox units render at ~16px, the body text size
+  const text = { "font-size": 21, fill: "#222", "font-family": "KaTeX_Main, 'Latin Modern Roman', serif" };
+
+  // trail: the travelled path, as N_SEG segments whose opacity fades with their age
+  const N_SEG = 40, N_PTS = 400;
+  const parts = PARTICLES.map((p, k) => {
+    const g = el("g", {});
+    const shade = el("path", { fill: "none", stroke: p.color, "stroke-width": 7, "stroke-opacity": 0.12,
+      "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+    const segs = lin(0, 1, N_SEG - 1).map(() =>
+      el("path", { fill: "none", stroke: p.color, "stroke-width": 2, "stroke-linecap": "round" }, g));
+    const [sx, sy] = px(p.y0);
+    el("circle", { cx: sx, cy: sy, r: 4, fill: "#FAFAFA", stroke: p.color, "stroke-width": 1.5 }, g);
+    // fixed label at the initial condition, pushed outwards from the origin
+    const r = Math.hypot(sx - W / 2, sy - H / 2);
+    const lx = sx + 20 * (sx - W / 2) / r, ly = Math.min(H - 10, sy + 20 * (sy - H / 2) / r + 6);
+    el("text", { x: lx, y: ly, "text-anchor": "middle", ...text }, g).innerHTML = sub("y", k + 1);
+    const dot = el("circle", { r: 5.5, fill: p.color, stroke: "#FAFAFA", "stroke-width": 2 }, g);
+    const traj = lin(0, 1, N_PTS).map((t) => psi(p.y0, t));
+    // the fixed label, as an obstacle for the moving labels
+    const fixedBox = [lx - 12, ly - 16, lx + 12, ly + 6];
+    return { shade, segs, dot, traj, y0: p.y0, k, fixedBox };
+  });
+
+  // moving labels psi(y_i, t), on top of every trajectory, with a white halo for legibility
+  const labels = el("g", { ...text, stroke: "#FAFAFA", "stroke-width": 4, "stroke-linejoin": "round", "paint-order": "stroke" });
+  parts.forEach((p) => {
+    p.label = el("text", {}, labels);
+    p.label.innerHTML = mi("ψ") + "(" + sub("y", p.k + 1) + ', <tspan class="t">0.00</tspan>)';
+    p.labelT = p.label.querySelector(".t");
+    p.slot = 0;
+  });
+  // label size in viewBox units, measured once rendered (fallback: estimate for the 21-unit font)
+  let LW = 115, LH = 24;
+  function measure() {
+    try { const b = parts[0].label.getBBox(); if (b.width > 0) { LW = b.width; LH = b.height; } } catch (e) {}
+  }
+  measure();
+  // candidate label positions around a dot (top-left corner of the label box): NE, SE, NW, SW, N, S
+  const GAP = 8;
+  const slots = () => [[GAP, -LH - GAP + 6], [GAP, GAP - 4], [-LW - GAP, -LH - GAP + 6], [-LW - GAP, GAP - 4],
+    [-LW / 2, -LH - GAP - 2], [-LW / 2, GAP + 2]];
+  const overlap = (a, b) => Math.min(a[2], b[2]) > Math.max(a[0], b[0]) && Math.min(a[3], b[3]) > Math.max(a[1], b[1]);
+
+  // greedy placement: keep each label's previous slot when it still fits, to avoid flickering
+  function placeLabels(dots) {
+    const S = slots();
+    const obstacles = [...parts.map((p) => p.fixedBox), ...dots.map(([x, y]) => [x - 7, y - 7, x + 7, y + 7])];
+    parts.forEach((p, k) => {
+      const [x, y] = dots[k];
+      const order = [p.slot, ...S.keys()].filter((v, i, a) => a.indexOf(v) === i);
+      const fits = (c) => {
+        const b = [x + S[c][0], y + S[c][1], x + S[c][0] + LW, y + S[c][1] + LH];
+        const ok = b[0] >= 0 && b[2] <= W && b[1] >= 0 && b[3] <= H &&
+          !obstacles.some((o, j) => j !== parts.length + k && overlap(o, b));
+        return ok ? b : null;
+      };
+      let box = null;
+      for (const c of order) { if ((box = fits(c))) { p.slot = c; break; } }
+      if (!box) box = [x + S[p.slot][0], y + S[p.slot][1]];
+      else obstacles.push(box);
+      p.label.setAttribute("x", box[0].toFixed(1));
+      p.label.setAttribute("y", (box[1] + LH * 0.78).toFixed(1));
+    });
+  }
+
+  const toD = (pts) => "M" + pts.map((p) => px(p).map((v) => v.toFixed(1)).join(",")).join("L");
+
+  function draw(t) {
+    parts.forEach((p) => {
+      const now = psi(p.y0, t);
+      const i = Math.floor(t * N_PTS);
+      const pts = [...p.traj.slice(0, i + 1), now];
+      p.shade.setAttribute("d", toD(pts));
+      // split the travelled path into segments, older ones more transparent
+      const n = pts.length - 1;
+      p.segs.forEach((seg, j) => {
+        const a = Math.floor(j * n / N_SEG), b = Math.floor((j + 1) * n / N_SEG);
+        if (b <= a) { seg.setAttribute("d", ""); return; }
+        seg.setAttribute("d", toD(pts.slice(a, b + 1)));
+        seg.setAttribute("stroke-opacity", (0.25 + 0.75 * (j + 1) / N_SEG).toFixed(3));
+      });
+      const [cx, cy] = px(now);
+      p.dot.setAttribute("cx", cx);
+      p.dot.setAttribute("cy", cy);
+      p.labelT.textContent = t.toFixed(2);
+    });
+    placeLabels(parts.map((p) => px(psi(p.y0, t))));
+  }
+
+  // playback: 6 seconds from 0 to 1, restarting from 0 if already at the end. Time lives in its own variable:
+  // reading it back from the slider would round it to the slider's step and swallow small per-frame increments.
+  let t = 0, playing = false, last = null;
+  function render() { draw(t); tLabel.textContent = t.toFixed(2); }
+  function setPlaying(on) {
+    playing = on;
+    button.innerHTML = on ? "&#10074;&#10074;" : "&#9654;";
+    button.setAttribute("aria-label", on ? "Pause" : "Play");
+    if (on) { last = null; requestAnimationFrame(step); }
+  }
+  function step(now) {
+    if (!playing) return;
+    if (last !== null) {
+      t = Math.min(1, t + (now - last) / 6000);
+      slider.value = t;
+      render();
+      if (t >= 1) return setPlaying(false);
+    }
+    last = now;
+    requestAnimationFrame(step);
+  }
+  button.addEventListener("click", () => {
+    if (!playing && t >= 1) t = 0;
+    setPlaying(!playing);
+  });
+  slider.addEventListener("input", () => { setPlaying(false); t = +slider.value; render(); });
+
+  render();
+  // KaTeX's fonts may arrive after the first draw: re-measure the labels and redraw once they are in
+  if (document.fonts) {
+    Promise.all([document.fonts.load("21px KaTeX_Math", "ψy"), document.fonts.load("21px KaTeX_Main", "(0.1)")])
+      .then(() => { measure(); render(); })
+      .catch(() => {});
+  }
+})();
+</script>

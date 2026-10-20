@@ -1,0 +1,266 @@
+{{- /*
+  Elevator-pitch illustration of flow matching: p_0 = N(m_0, s_0^2 I) is pushed, for t in [0, 1], through the
+  non-autonomous vector field  f(y, t) = m'(t) + L(t) (y - m(t)),  whose flow is affine:
+    psi(y_0, t) = m(t) + A(t) (y_0 - m_0),   A(t) = R(theta t^2) diag(a(t), b(t)),   L(t) = A'(t) A(t)^{-1}.
+  The mean m(t) arcs from m_0 to c, so that the drift swings from upwards to downwards, while A(t) stretches and
+  increasingly rotates p_0, so that the field's swirl around the mean builds up from zero; p_star is the time-1
+  push-forward.
+  Hence p_t = N(m(t), s_0^2 A(t) A(t)^T) stays Gaussian: it is drawn as a pale Gaussian shading plus two density
+  isolines (1 and 2 standard deviations), all mapped from the unit disc by the same SVG transform. The field
+  f(., t) is drawn as a quiver that changes with t, and three particles trace their (curved) trajectories.
+  Styled after the blog's TikZ figures; same style as cond_path_animation.html.
+*/ -}}
+{{- $id := printf "%s-%d" .Name .Ordinal -}}
+<figure class="flow-anim" id="{{ $id }}">
+  <svg viewBox="0 0 560 260" role="img" aria-label="The density p_0 transported onto p_star by a time-varying vector field, with particle trajectories, controlled by a time slider"></svg>
+  <div class="flow-anim-controls">
+    <button type="button" aria-label="Play">&#9654;</button>
+    <input type="range" min="0" max="1" step="0.002" value="0.35" aria-label="Time t">
+    <span class="flow-anim-t"><span class="flow-anim-mi">t</span> = <span class="flow-anim-tv">0.35</span></span>
+  </div>
+  {{- with .Get "caption" }}
+  <figcaption>{{ . }}</figcaption>
+  {{- end }}
+</figure>
+
+<style>
+  /* small figure, centred, wider than tall */
+  .flow-anim { margin: 1.2rem auto; max-width: 440px; text-align: center; }
+  .flow-anim svg { width: 100%; height: auto; display: block; user-select: none; }
+  .flow-anim-controls { display: flex; align-items: center; gap: 0.5rem; margin: 0.1rem 0 0; }
+  /* bare play glyph, no circle */
+  .flow-anim-controls button {
+    flex: none; width: 1.2rem; border: none; background: none; padding: 0; margin: 0;
+    color: #222; cursor: pointer; font-size: 0.75rem; line-height: 1;
+  }
+  .flow-anim-controls button:hover { color: #000; }
+  .flow-anim-controls button:focus-visible { outline: 1px dotted #555; outline-offset: 2px; }
+  /* slim slider: thin track, small round thumb */
+  .flow-anim-controls input[type=range] {
+    flex: 1; -webkit-appearance: none; appearance: none; background: transparent; height: 1rem; margin: 0; cursor: pointer;
+  }
+  .flow-anim-controls input[type=range]::-webkit-slider-runnable-track { height: 1px; background: #999; }
+  .flow-anim-controls input[type=range]::-moz-range-track { height: 1px; background: #999; }
+  .flow-anim-controls input[type=range]::-moz-range-progress { height: 1px; background: #222; }
+  .flow-anim-controls input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 9px; height: 9px; margin-top: -4px; border-radius: 50%; border: none; background: #222;
+  }
+  .flow-anim-controls input[type=range]::-moz-range-thumb { width: 9px; height: 9px; border-radius: 50%; border: none; background: #222; }
+  .flow-anim-controls input[type=range]:focus-visible { outline: 1px dotted #555; outline-offset: 3px; }
+  /* KaTeX fonts, declared by the KaTeX stylesheet the theme already loads */
+  .flow-anim-t { flex: none; width: 3.8rem; text-align: right; font-size: 0.9rem; font-family: KaTeX_Main, "Latin Modern Roman", serif; }
+  .flow-anim-mi { font-family: KaTeX_Math, "Latin Modern Roman", serif; font-style: italic; }
+  /* same as the theme's image shortcode */
+  .flow-anim figcaption { margin-top: 0.5rem; font-style: italic; text-align: center; }
+</style>
+
+<script>
+(function () {
+  const root = document.getElementById("{{ $id }}");
+  const svg = root.querySelector("svg");
+  const slider = root.querySelector("input");
+  const button = root.querySelector("button");
+  const tLabel = root.querySelector(".flow-anim-tv");
+  const NS = "http://www.w3.org/2000/svg";
+
+  // p_0 = N(M0, S0^2 I); the mean travels from M0 to C along a straight line lifted by a sine bump, so that the
+  // field's drift turns from upwards to downwards; A(t) stretches the axes from 1 to (A1, B1) and rotates by
+  // TH1 t^2, so that the rotation speed 2 TH1 t, i.e. the swirl, starts at zero and keeps growing
+  const M0 = [-2.3, -0.75], C = [2.0, -0.6], S0 = 0.3, BUMP = 1.3, A1 = 1.8, B1 = 0.6, TH1 = -0.9;
+  const theta = (t) => TH1 * t * t, dtheta = (t) => 2 * TH1 * t;
+  const mean = (t) => [(1 - t) * M0[0] + t * C[0], (1 - t) * M0[1] + t * C[1] + BUMP * Math.sin(Math.PI * t)];
+  const dmean = (t) => [C[0] - M0[0], C[1] - M0[1] + Math.PI * BUMP * Math.cos(Math.PI * t)];
+  const scales = (t) => [1 + (A1 - 1) * t, 1 + (B1 - 1) * t];
+  const mv = (M, [x, y]) => [M[0][0] * x + M[0][1] * y, M[1][0] * x + M[1][1] * y];
+  function linear(t) {
+    const [a, b] = scales(t), c = Math.cos(theta(t)), s = Math.sin(theta(t));
+    return [[c * a, -s * b], [s * a, c * b]];
+  }
+  // f(y, t) = m'(t) + L(t) (y - m(t)), with  L = A' A^{-1} = theta' J + R diag(a'/a, b'/b) R^T  and J the quarter turn
+  function field([x, y], t) {
+    const [a, b] = scales(t), da = (A1 - 1) / a, db = (B1 - 1) / b;
+    const c = Math.cos(theta(t)), s = Math.sin(theta(t)), cs = c * s * (da - db), w = dtheta(t);
+    const L = [[c * c * da + s * s * db, cs - w], [cs + w, s * s * da + c * c * db]];
+    const m = mean(t), dm = dmean(t), d = mv(L, [x - m[0], y - m[1]]);
+    return [dm[0] + d[0], dm[1] + d[1]];
+  }
+  // p_t = N(mean, S0^2 A A^T), and the flow  psi(y_0, t) = m(t) + A(t) (y_0 - M0)
+  const push = (t) => ({ mean: mean(t), E: linear(t) });
+  const psi = ([x, y], t) => {
+    const m = mean(t), d = mv(linear(t), [x - M0[0], y - M0[1]]);
+    return [m[0] + d[0], m[1] + d[1]];
+  };
+  // a few initial positions, drawn from p_0
+  const Y0 = [[-1.1, 0.8], [0.9, -1.0], [0.3, 0.2]].map(([x, y]) => [M0[0] + S0 * x, M0[1] + S0 * y]);
+
+  // plane coordinates [-3.5, 3.5] x [-1.625, 1.625] -> SVG pixels (80 px per unit)
+  const W = 560, H = 260, UNIT = 80;
+  const px = ([x, y]) => [W / 2 + UNIT * x, H / 2 - UNIT * y];
+  function el(tag, attrs, parent) {
+    const node = document.createElementNS(NS, tag);
+    for (const k in attrs) node.setAttribute(k, attrs[k]);
+    (parent || svg).appendChild(node);
+    return node;
+  }
+  // TeX-like labels with KaTeX's fonts: math italic for symbols, upright roman for digits and punctuation
+  const mi = (s) => '<tspan font-family="KaTeX_Math, serif" font-style="italic">' + s + "</tspan>";
+  const sub = (base, s) => mi(base) + '<tspan baseline-shift="sub" font-size="0.7em">' + s + "</tspan>";
+
+  // palette: navy target, light blue moving density, blue-grey field and axes
+  const NAVY = "#232e51", LIGHT = "#94a8c7", SLATE = "#9fb3b9", INK = "#264653";
+  // axes, with stealth-like arrow tips, as in the TikZ figures
+  const defs = el("defs", {});
+  const head = el("marker", { id: "{{ $id }}-head", viewBox: "0 0 10 10", refX: 9, refY: 5,
+    markerWidth: 8, markerHeight: 8, orient: "auto" }, defs);
+  el("path", { d: "M0,1L10,5L0,9L3,5Z", fill: INK }, head);
+  const axis = { stroke: INK, "stroke-width": 1, "marker-end": "url(#{{ $id }}-head)" };
+  el("line", { x1: 8, y1: H / 2, x2: W - 8, y2: H / 2, ...axis });
+  el("line", { x1: W / 2, y1: H - 6, x2: W / 2, y2: 6, ...axis });
+  // the figure is at most 440px wide: 21 viewBox units render at ~16px, the body text size
+  const text = { "font-size": 21, fill: "#222", "font-family": "KaTeX_Main, 'Latin Modern Roman', serif" };
+  const halo = { stroke: "#FAFAFA", "stroke-width": 5, "stroke-linejoin": "round", "paint-order": "stroke" };
+  // the density labels, larger than the body text
+  const big = { ...text, "font-size": 23 };
+
+  // the field f(., t), as a quiver centred on a half-unit grid; arrow length grows with the field's norm,
+  // relative to its largest norm over the grid and all times, so that lengths are comparable across t
+  const qhead = el("marker", { id: "{{ $id }}-qhead", viewBox: "0 0 10 10", refX: 8, refY: 5,
+    markerWidth: 4.5, markerHeight: 4.5, orient: "auto" }, defs);
+  el("path", { d: "M0,1L10,5L0,9L3,5Z", fill: SLATE }, qhead);
+  const quiver = el("g", { stroke: SLATE, "stroke-width": 1.3, "stroke-linecap": "round",
+    "marker-end": "url(#{{ $id }}-qhead)" });
+  const arrows = [];
+  for (let x = -3.25; x <= 3.26; x += 0.5) for (let y = -1.25; y <= 1.26; y += 0.5)
+    arrows.push({ p: [x, y], node: el("line", {}, quiver) });
+  let top = 0;
+  for (let k = 0; k <= 20; k++) arrows.forEach(({ p }) => { top = Math.max(top, Math.hypot(...field(p, k / 20))); });
+  function drawQuiver(t) {
+    arrows.forEach(({ p, node }) => {
+      const [u, v] = field(p, t), n = Math.hypot(u, v), len = 5 + 19 * n / top;
+      const [x0, y0] = px(p), dx = len * u / n / 2, dy = -len * v / n / 2;
+      node.setAttribute("x1", (x0 - dx).toFixed(1)); node.setAttribute("y1", (y0 - dy).toFixed(1));
+      node.setAttribute("x2", (x0 + dx).toFixed(1)); node.setAttribute("y2", (y0 + dy).toFixed(1));
+    });
+  }
+
+  // Gaussian density on the unit disc, cut at 3 standard deviations: pale shading, opacity follows exp(-r^2 / 2)
+  function gaussGradient(name, color) {
+    const g = el("radialGradient", { id: "{{ $id }}-" + name }, defs);
+    for (let k = 0; k <= 12; k++) {
+      const r = 3 * k / 12;
+      el("stop", { offset: (k / 12).toFixed(3), "stop-color": color,
+        "stop-opacity": (0.55 * Math.exp(-r * r / 2)).toFixed(3) }, g);
+    }
+    return "url(#{{ $id }}-" + name + ")";
+  }
+  // N(mean, S0^2 E E^T): the unit disc u is sent to  mean + 3 S0 E u  in the plane, then to pixels (y flipped)
+  const gaussTransform = ({ mean, E }) => {
+    const [cx, cy] = px(mean), k = 3 * UNIT * S0;
+    return `matrix(${[k * E[0][0], -k * E[1][0], k * E[0][1], -k * E[1][1], cx, cy].map((v) => v.toFixed(2)).join(",")})`;
+  };
+  // horizontal and vertical standard deviations of p_t, to place labels next to it
+  const extent = ({ E }) => [S0 * Math.hypot(E[0][0], E[0][1]), S0 * Math.hypot(E[1][0], E[1][1])];
+
+  // a Gaussian: pale shading plus isolines at 1 and 2 standard deviations, the outer one lighter;
+  // the isolines are circles of the unit disc, so they share the shading's transform (strokes kept unscaled)
+  const ISO = [1, 2];
+  function gaussian(name, color, parent) {
+    const g = el("g", {}, parent);
+    el("circle", { r: 1, fill: gaussGradient(name, color) }, g);
+    ISO.forEach((k) => el("circle", { r: k / 3, fill: "none", stroke: color, "stroke-width": k === 1 ? 1.8 : 1.2,
+      "stroke-opacity": k === 1 ? 1 : 0.55, "vector-effect": "non-scaling-stroke" }, g));
+    return (p) => g.setAttribute("transform", gaussTransform(p));
+  }
+
+  // the fixed target p_star, with its label above-right
+  const star = push(1), [ex, ey] = extent(star);
+  gaussian("star", NAVY)(star);
+  const [sx, sy] = px([C[0] + 1.4 * ex, C[1] + 2 * ey]);
+  el("text", { x: sx, y: sy, ...big, ...halo, fill: NAVY }).innerHTML = sub("p", "⋆");
+
+  // p_t
+  const drawPt = gaussian("hat", LIGHT);
+
+  // particles: trails along their (curved) trajectories, sampled once and revealed up to t, an open circle at
+  // their initial position and a dot at their current one
+  const STEPS = 200;
+  const particles = Y0.map((y0) => {
+    const path = Array.from({ length: STEPS + 1 }, (_, k) => px(psi(y0, k / STEPS)).map((v) => v.toFixed(1)).join(","));
+    const trail = el("polyline", { fill: "none", stroke: INK, "stroke-width": 1.2, "stroke-opacity": 0.6,
+      "stroke-linecap": "round", "stroke-linejoin": "round" });
+    const [x, y] = px(y0);
+    el("circle", { cx: x, cy: y, r: 2.5, fill: "#FAFAFA", stroke: INK, "stroke-width": 1.2 });
+    const dot = el("circle", { r: 4, fill: INK, stroke: "#FAFAFA", "stroke-width": 1.5 });
+    return { y0, path, trail, dot };
+  });
+
+  // label p_t, following the density, below-left
+  const label = el("text", { "text-anchor": "end", ...big, ...halo, fill: LIGHT });
+  label.innerHTML = mi("p") + '<tspan baseline-shift="sub" font-size="0.7em" class="t">0</tspan>';
+  const labelT = label.querySelector(".t");
+  const fmtT = (t) => (t === 0 ? "0" : t.toFixed(2));
+
+  // legend for the field f(., t), boxed as in pgfplots, in the top-right corner
+  const LEG_W = 120, LEG_H = 34, LEG_X = W - LEG_W - 10, LEG_Y = 10;
+  const legend = el("g", {});
+  el("rect", { x: LEG_X, y: LEG_Y, width: LEG_W, height: LEG_H, fill: "#FAFAFA", "fill-opacity": 0.92,
+    stroke: INK, "stroke-width": 0.8 }, legend);
+  el("line", { x1: LEG_X + 10, y1: LEG_Y + LEG_H / 2, x2: LEG_X + 32, y2: LEG_Y + LEG_H / 2, stroke: SLATE,
+    "stroke-width": 1.6, "stroke-linecap": "round", "marker-end": "url(#{{ $id }}-qhead)" }, legend);
+  const legendText = el("text", { x: LEG_X + 40, y: LEG_Y + LEG_H / 2 + 7, ...text, fill: "#222" }, legend);
+  legendText.innerHTML = mi("f") + '(⋅, <tspan class="t">0</tspan>)';
+  const legendT = legendText.querySelector(".t");
+
+  function draw(t) {
+    drawQuiver(t);
+    const p = push(t), [cx, cy] = px(p.mean), [ex, ey] = extent(p);
+    drawPt(p);
+    const k = Math.round(t * STEPS);
+    particles.forEach(({ y0, path, trail, dot }) => {
+      trail.setAttribute("points", path.slice(0, k + 1).join(" "));
+      const [x, y] = px(psi(y0, t));
+      dot.setAttribute("cx", x.toFixed(1)); dot.setAttribute("cy", y.toFixed(1));
+    });
+    labelT.textContent = legendT.textContent = fmtT(t);
+    // kept inside the figure: its right end is clamped so that the whole label clears the left edge, and its
+    // baseline so that the subscript clears the bottom edge
+    let lw = 60;
+    try { lw = label.getComputedTextLength() || lw; } catch (e) {}
+    label.setAttribute("x", Math.max(lw + 8, cx - 1.4 * UNIT * ex).toFixed(1));
+    label.setAttribute("y", Math.min(H - 8, cy + 2 * UNIT * ey + 14).toFixed(1));
+  }
+
+  // playback: 5 seconds from 0 to 1, restarting from 0 if already at the end. Time lives in its own variable:
+  // reading it back from the slider would round it to the slider's step and swallow small per-frame increments.
+  // The figure opens mid-way, at T_INIT, where the field and the trajectories are already telling; the first press
+  // on play still rewinds to 0 to show the whole transport, unless the slider was moved in the meantime.
+  const T_INIT = 0.35;
+  let t = T_INIT, playing = false, last = null, rewind = true;
+  function render() { draw(t); tLabel.textContent = t.toFixed(2); }
+  function setPlaying(on) {
+    playing = on;
+    button.innerHTML = on ? "&#10074;&#10074;" : "&#9654;";
+    button.setAttribute("aria-label", on ? "Pause" : "Play");
+    if (on) { last = null; requestAnimationFrame(step); }
+  }
+  function step(now) {
+    if (!playing) return;
+    if (last !== null) {
+      t = Math.min(1, t + (now - last) / 5000);
+      slider.value = t;
+      render();
+      if (t >= 1) return setPlaying(false);
+    }
+    last = now;
+    requestAnimationFrame(step);
+  }
+  button.addEventListener("click", () => {
+    if (!playing && (rewind || t >= 1)) t = 0;
+    rewind = false;
+    setPlaying(!playing);
+  });
+  slider.addEventListener("input", () => { setPlaying(false); rewind = false; t = +slider.value; render(); });
+
+  render();
+})();
+</script>
